@@ -572,10 +572,11 @@ pot_per_hour = pot_per_day / 24</div>
       </div>
       <div class="note">
         <span class="nt">One thing worth knowing</span>
-        <p>Only FxTwitter reports view counts. The syndication fallback does not carry them, so when
-          it is the source, <code>views</code> comes back as <code>null</code> and never as
-          <code>0</code>. A post read through the fallback cannot be ranked &mdash; which is exactly
-          the eligibility rule above, and why it is written that way.</p>
+        <p>Only FxTwitter reports view counts, and it does not have one for every post. The
+          syndication fallback never carries them at all. Either way <code>views</code> comes back
+          as <code>null</code> and never as <code>0</code>, and a post with a null view count cannot
+          be ranked &mdash; which is exactly the eligibility rule above, and why it is written that
+          way rather than as "fewest views loses".</p>
       </div>
     </section>
 
@@ -600,8 +601,11 @@ pot_per_hour = pot_per_day / 24</div>
             <code>replies</code>, <code>text</code>, <code>created</code>, <code>handle</code>,
             <code>name</code>, <code>avatar</code>, <code>url</code>, <code>exists</code> and
             <code>src</code>. <code>src</code> is <code>fxtwitter</code>, <code>syndication</code>
-            or <code>none</code>, and tells you whether <code>views</code> could have been
-            populated at all.</p>
+            or <code>none</code>. Only <code>fxtwitter</code> can carry a view count &mdash; and
+            even then not every post has one, so older posts commonly come back
+            <code>views: null</code> from it. A null is never a zero, and a post without a view
+            count cannot be ranked whichever source it came from. The example above is a 2022 post
+            and returns exactly that, which is worth seeing.</p>
           <div class="res" hidden></div>
         </div>
       </div>
