@@ -23,3 +23,8 @@ is the creator share, and 100% of it is the pot.
 
 Set `CONFIG.ca` in `index.html` to wire the contract address. Until then every
 figure renders as a dash and the anti-scam strip carries the pre-launch warning.
+
+
+---
+
+Live at potpad.vercel.app
