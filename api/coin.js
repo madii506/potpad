@@ -1,11 +1,11 @@
-// Market read for the coin itself. Dexscreener carries price / volume /
-// liquidity / mcap; Blockscout carries the holder count but 403s when called
-// from Vercel, so holders is deliberately returned as null and the PAGE
-// re-reads it client-side. Never cache that null.
+// Market read for the mint. pump.fun lives on Solana, so this is Dexscreener
+// filtered to chainId 'solana' — there is no Blockscout here and no 0x address.
+// The creator fee is set at launch and is configurable, so the pot is derived
+// from whatever rate is actually passed in rather than a hardcoded guess.
 const DS = 'https://api.dexscreener.com/latest/dex/tokens/';
-const BS = 'https://robinhoodchain.blockscout.com/api/v2/tokens/';
 
-const isCA = (s = '') => /^0x[a-fA-F0-9]{40}$/.test(String(s).trim());
+// Solana mints are base58, 32–44 chars. No 0/O/I/l in the alphabet.
+const isMint = (s = '') => /^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(String(s).trim());
 
 async function grab(url, ms = 6000) {
   const ctl = new AbortController();
@@ -19,22 +19,24 @@ async function grab(url, ms = 6000) {
 
 export default async function handler(req, res) {
   const ca = String(req.query?.ca || '').trim();
+  // creator fee as a percent, e.g. 1 means 1.00%. pump.fun caps it at 3.00%.
+  const feePct = Math.min(3, Math.max(0, Number(req.query?.fee ?? 1)));
   res.setHeader('cache-control', 's-maxage=45, stale-while-revalidate=180');
-  if (!isCA(ca)) return res.status(400).json({ error: 'contract address required' });
+  if (!isMint(ca)) return res.status(400).json({ error: 'solana mint address required' });
 
   const ds = await grab(DS + ca);
-  const pairs = (ds?.pairs || []).filter((p) => p.chainId === 'robinhood');
+  const pairs = (ds?.pairs || []).filter((p) => p.chainId === 'solana');
   pairs.sort((a, b) => (b.liquidity?.usd || 0) - (a.liquidity?.usd || 0));
   const p = pairs[0] || null;
 
   const vol24 = p?.volume?.h24 ?? null;
-  // Pons: 1.00% trade fee, 70% to the creator. 0.70% of volume is the pot.
-  const potPerDay = vol24 == null ? null : vol24 * 0.007;
-
-  const bs = await grab(BS + ca);
+  const potPerDay = vol24 == null ? null : vol24 * (feePct / 100);
 
   return res.status(200).json({
     ca,
+    chain: 'solana',
+    venue: 'pump.fun',
+    feePct,
     hasPair: !!p,
     price: p?.priceUsd ? Number(p.priceUsd) : null,
     marketCap: p?.marketCap ?? p?.fdv ?? null,
@@ -44,9 +46,7 @@ export default async function handler(req, res) {
     pairUrl: p?.url ?? null,
     potPerDay,
     potPerHour: potPerDay == null ? null : potPerDay / 24,
-    name: bs?.name ?? p?.baseToken?.name ?? null,
-    symbol: bs?.symbol ?? p?.baseToken?.symbol ?? null,
-    holders: null,        // 403 from Vercel. The page reads this itself.
-    holdersNote: 'read client-side from Blockscout',
+    name: p?.baseToken?.name ?? null,
+    symbol: p?.baseToken?.symbol ?? null,
   });
 }
