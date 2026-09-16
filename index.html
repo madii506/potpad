@@ -29,24 +29,33 @@ body{overflow-x:clip;margin:0;background:var(--bg);color:var(--white);
 a{color:inherit}
 section[id]{scroll-margin-top:24px}
 pre{margin:0;font-family:var(--mono)}
+.gold{color:var(--gold)}
 
-/* ---------- nav: bracketed, centred (1fr auto 1fr) -------------------- */
+/* whole-page flicker: a fixed veil, so the sticky nav keeps working.
+   opacity/filter on <body> would create a containing block and kill it. */
+.crt{position:fixed;inset:0;pointer-events:none;z-index:60;background:#000;
+  animation:crt 7.2s ease-in-out infinite;will-change:opacity}
+@keyframes crt{
+  0%{opacity:.012} 14%{opacity:.055} 27%{opacity:.018} 41%{opacity:.07}
+  55%{opacity:.024} 68%{opacity:.048} 82%{opacity:.014} 100%{opacity:.012}
+}
+
 nav{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;
   padding:14px 20px;border-bottom:1px solid var(--hair);position:sticky;top:0;z-index:40;
   background:rgba(3,3,5,.9);backdrop-filter:blur(8px)}
 nav .sp{min-width:0}
-nav .links{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
+nav .links{display:flex;justify-content:center;gap:7px;flex-wrap:wrap}
 nav a{font-size:12.5px;color:var(--dim);text-decoration:none;padding:3px 2px;transition:.15s}
 nav a::before{content:"[";color:var(--dim);margin-right:3px}
 nav a::after{content:"]";color:var(--dim);margin-left:3px}
 nav a:hover{color:var(--white)}
 nav a.on{color:var(--gold)}
 nav a.on::before,nav a.on::after{color:var(--gold)}
+nav a.ext{color:var(--gold)}
 #mb{display:none;background:none;border:1px solid var(--hair);color:var(--white);
   padding:6px 10px;font-size:12px;cursor:pointer;font-family:var(--mono)}
 
-/* ---------- hero: ascii wordmark, flickering white -------------------- */
-.hero{padding:60px 20px 46px;text-align:center;border-bottom:1px solid var(--hair)}
+.hero{padding:58px 20px 44px;text-align:center;border-bottom:1px solid var(--hair)}
 .ascii{display:inline-block;font-size:clamp(8px,1.9vw,18px);line-height:1.04;
   letter-spacing:.06em;white-space:pre;color:#fff;animation:flick 4.4s steps(1) infinite;
   text-shadow:0 0 12px rgba(255,255,255,.28)}
@@ -54,9 +63,9 @@ nav a.on::before,nav a.on::after{color:var(--gold)}
   0%,10%,12%,28%,30%,58%,60%,61%,84%,100%{opacity:1}
   11%{opacity:.34} 29%{opacity:.62} 59%{opacity:.22} 60.5%{opacity:.78} 85%{opacity:.46}
 }
-.hero .tag{margin:26px 0 6px;font-size:clamp(15px,2.1vw,19px);letter-spacing:.02em}
+.hero .tag{margin:24px 0 8px;font-size:clamp(15px,2.1vw,19px);letter-spacing:.02em}
 .hero .tag em{font-style:normal;color:var(--gold)}
-.hero .sub{color:var(--grey);max-width:66ch;margin:0 auto 26px;font-size:13.5px}
+.hero .sub{color:var(--grey);max-width:68ch;margin:0 auto 24px;font-size:13.5px}
 .btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
 .btn{display:inline-block;padding:9px 16px;font-size:13px;font-family:var(--mono);
   text-decoration:none;cursor:pointer;border:1px solid var(--hair);background:transparent;
@@ -64,9 +73,7 @@ nav a.on::before,nav a.on::after{color:var(--gold)}
 .btn:hover{border-color:var(--gold);color:var(--gold)}
 .btn.solid{background:var(--gold);color:#120c02;border-color:var(--gold);font-weight:600}
 .btn.solid:hover{background:#ffc862}
-.btn[disabled]{opacity:.4;cursor:not-allowed}
 
-/* ---------- stat rail -------------------------------------------------- */
 .rail{display:grid;grid-template-columns:repeat(5,1fr);border-bottom:1px solid var(--hair)}
 .rail div{padding:16px 14px;border-right:1px solid var(--hair)}
 .rail div:last-child{border-right:0}
@@ -75,10 +82,8 @@ nav a.on::before,nav a.on::after{color:var(--gold)}
 .rail b{font-size:17px;font-weight:600}
 .rail b.g{color:var(--gold)} .rail b.ok{color:var(--green)}
 
-/* ---------- marquee ---------------------------------------------------- */
-.mq{width:100vw;margin-left:calc(50% - 50vw);overflow:hidden;border-bottom:1px solid var(--hair);
-  padding:10px 0}
-.mq .row{display:flex;width:max-content;animation:slide 48s linear infinite}
+.mq{width:100vw;margin-left:calc(50% - 50vw);overflow:hidden;border-bottom:1px solid var(--hair);padding:10px 0}
+.mq .row{display:flex;width:max-content;animation:slide 90s linear infinite}
 .mq:hover .row{animation-play-state:paused}
 @keyframes slide{to{transform:translateX(-50%)}}
 .mq .chip{display:inline-flex;align-items:center;gap:7px;margin-right:26px;
@@ -87,28 +92,48 @@ nav a.on::before,nav a.on::after{color:var(--gold)}
   background:#111;object-fit:cover}
 .mq .chip img.ok{opacity:1}
 
-/* ---------- bands ------------------------------------------------------ */
 .band{padding:58px 20px;border-bottom:1px solid var(--hair)}
-.wrap{max-width:900px;margin:0 auto}
+.wrap{max-width:920px;margin:0 auto}
 .eyebrow{color:var(--dim);font-size:12px;letter-spacing:.1em;margin:0 0 16px;
-  overflow:hidden;white-space:nowrap}
+  display:flex;align-items:center;gap:10px}
 .eyebrow b{color:var(--gold);font-weight:600}
+.eyebrow i{flex:1;height:1px;background:var(--hair);display:block}
 h2{font-size:clamp(19px,2.7vw,25px);font-weight:600;margin:0 0 10px;letter-spacing:-.01em}
 h2 em{font-style:normal;color:var(--gold)}
-.lede{color:var(--grey);max-width:74ch;margin:0 0 26px;font-size:13.5px}
+.lede{color:var(--grey);max-width:76ch;margin:0 0 24px;font-size:13.5px}
 
-/* ---------- ascii boxes ------------------------------------------------ */
 .box{border:1px solid var(--hair);background:var(--panel);padding:18px}
 .box .bt{color:var(--dim);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;
   margin:0 0 14px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .rows{border-top:1px solid var(--hair)}
-.rows .r{display:grid;grid-template-columns:44px 1fr;gap:14px;padding:16px 0;
+.rows .r{display:grid;grid-template-columns:56px 1fr;gap:14px;padding:15px 0;
   border-bottom:1px solid var(--hair);align-items:start}
 .rows .n{color:var(--gold);font-size:12px}
 .rows h3{margin:0 0 4px;font-size:14.5px;font-weight:600}
 .rows p{margin:0;color:var(--grey);font-size:13px}
 
-/* ---------- forms / output -------------------------------------------- */
+ul.list{margin:0;padding:0;list-style:none}
+ul.list li{color:var(--grey);font-size:13px;padding:7px 0 7px 18px;position:relative;
+  border-bottom:1px solid var(--hair)}
+ul.list li:last-child{border-bottom:0}
+ul.list li::before{content:"·";position:absolute;left:4px;color:var(--gold)}
+
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.vs .col{border:1px solid var(--hair);background:var(--panel);padding:18px}
+.vs .col.hi{border-color:rgba(240,178,58,.4)}
+.vs .ch{font-size:11.5px;letter-spacing:.14em;color:var(--dim);margin-bottom:12px}
+.vs .col.hi .ch{color:var(--gold)}
+
+table.tbl{width:100%;border-collapse:collapse;font-size:12.5px}
+table.tbl th{text-align:left;color:var(--dim);font-weight:500;font-size:10.5px;
+  letter-spacing:.12em;text-transform:uppercase;padding:12px 14px;border-bottom:1px solid var(--hair)}
+table.tbl td{padding:11px 14px;border-bottom:1px solid var(--hair);color:var(--grey)}
+table.tbl tr:last-child td{border-bottom:0}
+table.tbl td.none{text-align:center;color:var(--dim);padding:26px 14px}
+table.tbl td b{color:var(--white);font-weight:600}
+td.st.ok{color:var(--green)} td.st.bad{color:var(--red)} td.st.wait{color:var(--gold)}
+
 label{display:block;font-size:10.5px;letter-spacing:.13em;color:var(--dim);
   text-transform:uppercase;margin:0 0 6px}
 input[type=text],input[type=number]{width:100%;padding:10px 12px;border:1px solid var(--hair);
@@ -118,14 +143,13 @@ input:focus{outline:none;border-color:var(--gold)}
 .two{display:grid;grid-template-columns:1fr 200px;gap:14px}
 .out{margin-top:14px;border-top:1px solid var(--hair);padding-top:14px;font-size:13px;
   color:var(--grey);white-space:pre-wrap;word-break:break-word}
-.out b{color:var(--white)} .out .g{color:var(--gold)}
+.out b{color:var(--white)}
 .kv{display:grid;grid-template-columns:1fr auto;gap:10px;padding:7px 0;
   border-bottom:1px solid var(--hair);font-size:13px}
 .kv:last-of-type{border-bottom:0}
 .kv span{color:var(--dim)}
 .bar{font-size:12px;color:var(--gold);letter-spacing:-.04em;margin:12px 0 6px;white-space:nowrap;overflow:hidden}
 
-/* ---------- empty states ----------------------------------------------- */
 .empty{border:1px dashed var(--hair);padding:38px 20px;text-align:center;color:var(--grey)}
 .empty h4{margin:0 0 6px;color:var(--white);font-size:14.5px;font-weight:600}
 .empty p{margin:0 0 14px;font-size:13px}
@@ -144,26 +168,22 @@ details p{color:var(--grey);margin:9px 0 0 16px;font-size:13px}
 
 .rv{opacity:0;transform:translateY(12px);transition:opacity .5s ease,transform .5s ease}
 .rv.vis{opacity:1;transform:none}
-/* whole-page flicker: a fixed veil, so the sticky nav keeps working */
-.crt{position:fixed;inset:0;pointer-events:none;z-index:60;background:#000;
-  animation:crt 7.2s ease-in-out infinite;will-change:opacity}
-@keyframes crt{
-  0%{opacity:.012} 14%{opacity:.055} 27%{opacity:.018} 41%{opacity:.07}
-  55%{opacity:.024} 68%{opacity:.048} 82%{opacity:.014} 100%{opacity:.012}
-}
 @media (prefers-reduced-motion:reduce){
   .rv{opacity:1;transform:none;transition:none}
-  .mq .row,.ascii,.crt{animation:none}
-  .crt{opacity:0}
+  .mq .row,.ascii,.crt{animation:none} .crt{opacity:0}
 }
-@media(max-width:860px){ .rail{grid-template-columns:repeat(2,1fr)} .rail div{border-bottom:1px solid var(--hair)} .two{grid-template-columns:1fr} }
+@media(max-width:860px){
+  .rail{grid-template-columns:repeat(2,1fr)} .rail div{border-bottom:1px solid var(--hair)}
+  .two,.grid2,.vs{grid-template-columns:1fr}
+}
 @media(max-width:700px){
   nav{grid-template-columns:1fr auto}
   nav .sp:first-child{display:none}
   nav .links{display:none;grid-column:1/-1;flex-direction:column;align-items:center;gap:10px;padding-top:10px}
   nav .links.open{display:flex}
   #mb{display:block}
-  .band{padding:44px 16px} .hero{padding:44px 16px 36px}
+  .band{padding:44px 16px} .hero{padding:44px 16px 34px}
+  table.tbl{font-size:11.5px} table.tbl th,table.tbl td{padding:9px 8px}
 }
 </style>
 </head>
@@ -177,8 +197,11 @@ details p{color:var(--grey);margin:9px 0 0 16px;font-size:13px}
     <a href="#hour">hour</a>
     <a href="#check">check</a>
     <a href="#model">model</a>
+    <a href="#spec">spec</a>
     <a href="#rundown">rundown</a>
+    <a href="#status">status</a>
     <a href="#faq">faq</a>
+    <a href="docs.html" class="ext">docs</a>
   </div>
   <div class="sp" style="text-align:right"><button id="mb" aria-label="Menu">menu</button></div>
 </nav>
@@ -190,9 +213,13 @@ details p{color:var(--grey);margin:9px 0 0 16px;font-size:13px}
 ██      ██   ██    ██
 ██       █████     ██</pre>
   <p class="tag">Every hour, someone <em>gets paid.</em></p>
+  <p class="sub">The creator fee fills a pot. At the top of every hour the whole thing goes to the
+    X handle whose post about $POT got the most views &mdash; paid in dollars through X Money.
+    No wallet. No code. Nothing to claim.</p>
   <div class="btns">
-    <a class="btn solid" href="#check">check</a>
+    <a class="btn solid" href="#check">check a post</a>
     <a class="btn" href="#rule">how it works</a>
+    <a class="btn" href="docs.html">docs</a>
   </div>
 </header>
 
@@ -208,7 +235,7 @@ details p{color:var(--grey);margin:9px 0 0 16px;font-size:13px}
 
 <section class="band" id="rule">
   <div class="wrap rv">
-    <p class="eyebrow"><b>01</b> &mdash; the rule &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;</p>
+    <p class="eyebrow"><b>01</b> &mdash; the rule <i></i></p>
     <h2>One pot. One winner. <em>Every hour.</em></h2>
     <p class="lede">No application, no allowlist, no discretion. The hour decides, the chain pays,
       the receipt is public.</p>
@@ -225,7 +252,7 @@ details p{color:var(--grey);margin:9px 0 0 16px;font-size:13px}
         <p>X Money sends dollars to any handle for free. No wallet to connect, no code to paste in
           your bio, no window before it burns. Every other pad says <em>only you can claim</em>.
           This one has nothing to claim.</p></div></div>
-      <div class="r"><div class="n">04</div><div>
+      <div class="r" style="border-bottom:0"><div class="n">04</div><div>
         <h3>The payout posts itself</h3>
         <p>Each win goes out as a public post naming the handle, the post, the views and the amount,
           linked to a receipt. Nobody can claim an hour that never happened.</p></div></div>
@@ -235,7 +262,7 @@ details p{color:var(--grey);margin:9px 0 0 16px;font-size:13px}
 
 <section class="band" id="hour">
   <div class="wrap rv">
-    <p class="eyebrow"><b>02</b> &mdash; this hour &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;</p>
+    <p class="eyebrow"><b>02</b> &mdash; this hour <i></i></p>
     <div class="head">
       <h2 style="margin:0">Who is <em>winning</em> right now</h2>
       <span class="status" id="feed-status"><i></i><span>feed offline</span></span>
@@ -251,28 +278,42 @@ details p{color:var(--grey);margin:9px 0 0 16px;font-size:13px}
 
 <section class="band" id="check">
   <div class="wrap rv">
-    <p class="eyebrow"><b>03</b> &mdash; check a post &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;</p>
-    <h2>Paste any post. <em>See what it did.</em></h2>
-    <p class="lede">Reads the live view count straight from X, the same way the hour is settled.
-      Works on any public post, not only ones about $POT &mdash; try your own.</p>
-    <div class="box">
-      <div class="bt"><span>GET /api/tweet</span><span id="ck-src">idle</span></div>
-      <div class="field">
-        <label for="f-url">x post url or id</label>
-        <input type="text" id="f-url" placeholder="https://x.com/someone/status/1234567890123456789" spellcheck="false">
+    <p class="eyebrow"><b>03</b> &mdash; check <i></i></p>
+    <h2>Paste anything. <em>See what it did.</em></h2>
+    <p class="lede">Both of these read live from X, the same way the hour is settled. They work on
+      any public post or handle, not only ones about $POT &mdash; try your own.</p>
+    <div class="grid2">
+      <div class="box">
+        <div class="bt"><span>GET /api/tweet</span><span id="ck-src">idle</span></div>
+        <div class="field">
+          <label for="f-url">x post url or id</label>
+          <input type="text" id="f-url" placeholder="https://x.com/someone/status/1234567890123456789" spellcheck="false">
+        </div>
+        <div class="btns" style="justify-content:flex-start">
+          <button class="btn solid" id="b-check">read post</button>
+          <button class="btn" id="b-clear">clear</button>
+        </div>
+        <div class="out" id="o-check" hidden></div>
       </div>
-      <div class="btns" style="justify-content:flex-start">
-        <button class="btn solid" id="b-check">read it</button>
-        <button class="btn" id="b-clear">clear</button>
+      <div class="box">
+        <div class="bt"><span>GET /api/handle</span><span id="hk-src">idle</span></div>
+        <div class="field">
+          <label for="f-h">x handle</label>
+          <input type="text" id="f-h" placeholder="@cobie" spellcheck="false">
+        </div>
+        <div class="btns" style="justify-content:flex-start">
+          <button class="btn solid" id="b-handle">read handle</button>
+          <button class="btn" id="b-hclear">clear</button>
+        </div>
+        <div class="out" id="o-handle" hidden></div>
       </div>
-      <div class="out" id="o-check" hidden></div>
     </div>
   </div>
 </section>
 
 <section class="band" id="model">
   <div class="wrap rv">
-    <p class="eyebrow"><b>04</b> &mdash; the model &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;</p>
+    <p class="eyebrow"><b>04</b> &mdash; the model <i></i></p>
     <h2>All of the creator fee. <em>None of it kept.</em></h2>
     <p class="lede">pump.fun lets the creator set a per-trade fee at launch, capped at 3.00%.
       Whatever it is set to, all of it is the prize. Change either number and the arithmetic
@@ -290,35 +331,145 @@ details p{color:var(--grey);margin:9px 0 0 16px;font-size:13px}
         </div>
       </div>
       <div class="bar" id="m-bar"></div>
-      <div class="kv"><span>into the pot</span><b class="g" style="color:var(--gold)">100% of the creator fee</b></div>
+      <div class="kv"><span>into the pot</span><b class="gold">100% of the creator fee</b></div>
       <div class="kv"><span>pot per day</span><b id="m-day">&mdash;</b></div>
       <div class="kv"><span>pot per hour</span><b id="m-hour">&mdash;</b></div>
       <div class="kv"><span>kept by the pad</span><b>$0.00</b></div>
       <div class="out" id="o-model"></div>
+    </div>
+    <div class="box" style="margin-top:16px;padding:0">
+      <table class="tbl">
+        <thead><tr><th>24h volume</th><th>pot per day</th><th>pot per hour</th></tr></thead>
+        <tbody id="m-tbl"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="spec">
+  <div class="wrap rv">
+    <p class="eyebrow"><b>05</b> &mdash; the spec <i></i></p>
+    <h2>How an hour is <em>actually settled.</em></h2>
+    <p class="lede">Written down so it cannot be changed quietly. If any of this ever moves, the
+      change is a post with a date on it.</p>
+    <div class="grid2">
+      <div class="box">
+        <div class="bt"><span>ELIGIBLE</span><span>a post must</span></div>
+        <ul class="list">
+          <li>be public and readable through X's own endpoints</li>
+          <li>name $POT in its text</li>
+          <li>have been posted inside the hour being settled</li>
+          <li>report a view count &mdash; without one it cannot be ranked</li>
+          <li>come from a handle not already paid today</li>
+        </ul>
+      </div>
+      <div class="box">
+        <div class="bt"><span>NOT ELIGIBLE</span><span>a post that</span></div>
+        <ul class="list">
+          <li>is private, protected, or deleted before settlement</li>
+          <li>was edited after the hour closed</li>
+          <li>comes from an account created inside the same hour</li>
+          <li>is a repost &mdash; the original wins, not the repost</li>
+          <li>comes from the $POT account itself</li>
+        </ul>
+      </div>
+    </div>
+    <div class="box" style="margin-top:16px">
+      <div class="bt"><span>SETTLEMENT ORDER</span><span>on the hour, utc</span></div>
+      <div class="rows" style="border-top:0">
+        <div class="r"><div class="n">T+0</div><div><h3>The hour closes</h3>
+          <p>Posts made after this second belong to the next hour, not this one.</p></div></div>
+        <div class="r"><div class="n">T+1m</div><div><h3>Views are read</h3>
+          <p>Every eligible post is read once. The number recorded is the number at that moment and
+            it is the number published &mdash; later drift never changes a settled hour.</p></div></div>
+        <div class="r"><div class="n">T+2m</div><div><h3>The winner is ranked</h3>
+          <p>Highest views takes it. A tie goes to whichever post was published earlier. If the top
+            handle has already been paid today, it passes to the next post down.</p></div></div>
+        <div class="r"><div class="n">T+3m</div><div><h3>The dollars send</h3>
+          <p>Through X Money, to the handle, in dollars. The recipient does nothing.</p></div></div>
+        <div class="r" style="border-bottom:0"><div class="n">T+4m</div><div><h3>The receipt posts</h3>
+          <p>A public post carrying the handle, the post, the view count and the amount. That post is
+            the record, and it is the row that appears in the rundown.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="versus">
+  <div class="wrap rv">
+    <p class="eyebrow"><b>06</b> &mdash; the difference <i></i></p>
+    <h2>Everywhere else, <em>and here.</em></h2>
+    <div class="vs">
+      <div class="col">
+        <div class="ch">EVERYWHERE ELSE</div>
+        <ul class="list">
+          <li>the fee goes to one handle, picked once by whoever launched it</li>
+          <li>the money is escrowed until you claim it</li>
+          <li>you post a code in your bio to prove it is you</li>
+          <li>a window runs out and the money goes back</li>
+          <li>you need a wallet, and the seed phrase that comes with it</li>
+          <li>you find out you were owed something months later</li>
+        </ul>
+      </div>
+      <div class="col hi">
+        <div class="ch">HERE</div>
+        <ul class="list">
+          <li>the fee goes to whoever the timeline actually watched, every hour</li>
+          <li>there is no escrow, because there is no claim</li>
+          <li>you prove nothing &mdash; you already posted from the account</li>
+          <li>nothing expires, because nothing is waiting</li>
+          <li>you need an X account, which you are reading this on</li>
+          <li>you find out because dollars appeared</li>
+        </ul>
+      </div>
     </div>
   </div>
 </section>
 
 <section class="band" id="rundown">
   <div class="wrap rv">
-    <p class="eyebrow"><b>05</b> &mdash; the rundown &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;</p>
+    <p class="eyebrow"><b>07</b> &mdash; the rundown <i></i></p>
     <div class="head">
       <h2 style="margin:0">Every hour, <em>on the record</em></h2>
       <span class="status" id="run-count">0 hours</span>
     </div>
     <p class="lede">Each row is an hour: who won it, what they posted, how far it travelled, what it
       paid, and the receipt. It only ever grows.</p>
-    <div class="empty">
-      <h4>No hours have been paid yet.</h4>
-      <p>The first row appears the first time the clock strikes and a post exists.
-        Nothing is back-filled and nothing is estimated.</p>
+    <div class="box" style="padding:0">
+      <table class="tbl">
+        <thead><tr><th>hour</th><th>handle</th><th>views</th><th>paid</th><th>receipt</th></tr></thead>
+        <tbody><tr><td colspan="5" class="none">no hours have been paid yet &mdash; nothing is back-filled, nothing is estimated</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="status">
+  <div class="wrap rv">
+    <p class="eyebrow"><b>08</b> &mdash; status <i></i></p>
+    <div class="head">
+      <h2 style="margin:0">What is <em>actually up</em></h2>
+      <button class="btn" id="b-probe">re-run probes</button>
+    </div>
+    <p class="lede">Live probes against this site's own readers, run in your browser when the page
+      loads. If something is down it says so here, rather than quietly returning a zero.</p>
+    <div class="box" style="padding:0">
+      <table class="tbl">
+        <thead><tr><th>endpoint</th><th>probe</th><th>state</th><th>ms</th></tr></thead>
+        <tbody id="probe-body">
+          <tr data-p="handle"><td><b>/api/handle</b></td><td>@elonmusk</td><td class="st">&mdash;</td><td class="ms">&mdash;</td></tr>
+          <tr data-p="tweet"><td><b>/api/tweet</b></td><td>a known post id</td><td class="st">&mdash;</td><td class="ms">&mdash;</td></tr>
+          <tr data-p="avatar"><td><b>/api/avatar</b></td><td>@cobie</td><td class="st">&mdash;</td><td class="ms">&mdash;</td></tr>
+          <tr data-p="coin"><td><b>/api/coin</b></td><td>a live solana mint</td><td class="st">&mdash;</td><td class="ms">&mdash;</td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </section>
 
 <section class="band" id="faq" style="border-bottom:0">
   <div class="wrap rv">
-    <p class="eyebrow"><b>06</b> &mdash; faq &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;</p>
+    <p class="eyebrow"><b>09</b> &mdash; faq <i></i></p>
     <h2>The awkward questions, <em>first.</em></h2>
     <div style="margin-top:18px">
       <details open><summary>Is there a mint address yet?</summary>
@@ -334,17 +485,19 @@ details p{color:var(--grey);margin:9px 0 0 16px;font-size:13px}
       <details><summary>What stops one account winning every hour?</summary>
         <p>X Money is rate-limited to one payment per person per day. That is the rail's rule, not
           ours &mdash; and it is exactly why there is one winner per hour rather than a spray. An
-          account already paid today is skipped and the pot goes to the next post.</p></details>
-      <details><summary>What counts as a post about $POT?</summary>
-        <p>A public post that names the coin. Replies count, quotes count, threads count as their
-          first post. Private and deleted posts cannot be read, so they cannot win.</p></details>
+          account already paid today is skipped and the pot goes to the next post down.</p></details>
+      <details><summary>What if two posts tie on views?</summary>
+        <p>The one published earlier takes it. Ties break on timestamp, never on judgement.</p></details>
+      <details><summary>Can I win with a post about something else?</summary>
+        <p>No. The post has to name $POT. Beyond that there are no rules about what it says &mdash;
+          including whether it is complimentary.</p></details>
       <details><summary>Where does the money come from?</summary>
         <p>Trading fees, and nowhere else. No treasury, no allocation, no outside funding. If nobody
           trades, the pot is empty and this page will say so.</p></details>
       <details><summary>Can I check the payouts without trusting you?</summary>
-        <p>Yes. Each payout is a public post and a receipt, and the fee income is derived from
-          on-chain volume you can read yourself. The model above does that arithmetic in front of
-          you and prints its own working.</p></details>
+        <p>Yes. Each payout is a public post and a receipt, and the fee income derives from on-chain
+          volume you can read yourself. The model above does that arithmetic in front of you and
+          prints its own working; the docs publish the settlement order in full.</p></details>
     </div>
   </div>
 </section>
@@ -356,6 +509,8 @@ const HANDLES = ['elonmusk','VitalikButerin','cobie','blknoiz06','notthreadguy',
                  'MustStopMurad','frankdegods','Cented7','traderpow','orangie','gainzy222',
                  'ZssBecker','Kookcapitalllc','mrpunkdoteth','loomdart','IcoBeast','Cupseyy',
                  'nyhrox','jack'];
+const PROBE_MINT = 'DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263';
+const PROBE_POST = '1519480761749016577';
 
 const $ = s => document.querySelector(s);
 const usd = n => n==null ? '—' : '$' + Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -365,7 +520,7 @@ const num = n => n==null ? '—' : Number(n).toLocaleString('en-US');
 $('#mb').addEventListener('click', ()=> $('#menu').classList.toggle('open'));
 $('#menu').addEventListener('click', e => { if (e.target.tagName==='A') $('#menu').classList.remove('open'); });
 (function(){
-  // filter to #-prefixed hrefs — querySelector('/docs.html') throws and would
+  // filter to #-prefixed hrefs — querySelector('docs.html') throws and would
   // silently kill every script after this one
   const links = [...document.querySelectorAll('nav a')].filter(a => (a.getAttribute('href')||'').startsWith('#'));
   const map = new Map();
@@ -376,12 +531,22 @@ $('#menu').addEventListener('click', e => { if (e.target.tagName==='A') $('#menu
   map.forEach((_, sec) => io.observe(sec));
 })();
 
-/* reveals */
+/* reveals — the observer handles normal reading; the sweep catches anything a
+   jump (an anchor click, end key, restored scroll) flew past without it ever
+   intersecting, so nothing is left invisible above the fold. */
 (function(){
   const io = new IntersectionObserver(es => es.forEach(e => {
     if (e.isIntersecting){ e.target.classList.add('vis'); io.unobserve(e.target); }
-  }), {threshold:.1});
-  document.querySelectorAll('.rv').forEach(el => io.observe(el));
+  }), {threshold:.08});
+  const all = [...document.querySelectorAll('.rv')];
+  all.forEach(el => io.observe(el));
+  const sweep = () => all.forEach(el => {
+    if (!el.classList.contains('vis') && el.getBoundingClientRect().top < innerHeight){
+      el.classList.add('vis'); io.unobserve(el);
+    }
+  });
+  addEventListener('scroll', sweep, {passive:true});
+  addEventListener('hashchange', sweep);
 })();
 
 /* marquee */
@@ -389,10 +554,10 @@ $('#menu').addEventListener('click', e => { if (e.target.tagName==='A') $('#menu
   const one = HANDLES.map(h =>
     `<span class="chip"><img src="/api/avatar?h=${h}" alt="" referrerpolicy="no-referrer"
       onload="this.classList.add('ok')" onerror="this.remove()">@${h}</span>`).join('');
-  $('#mq').innerHTML = one + one;          // duplicated for a seamless loop
+  $('#mq').innerHTML = one + one;
 })();
 
-/* countdown to the next utc hour */
+/* countdown */
 setInterval(function tick(){
   const now = new Date(), next = new Date(now);
   next.setUTCMinutes(60,0,0);
@@ -402,13 +567,9 @@ setInterval(function tick(){
 
 /* this hour */
 async function loadHour(){
-  const st = $('#feed-status'), box = $('#hour-empty');
+  const st = $('#feed-status');
   st.classList.remove('live'); st.querySelector('span').textContent = 'reading…';
-  if (!CONFIG.ca){
-    st.querySelector('span').textContent = 'feed offline';
-    box.querySelector('h4').textContent = 'No coin yet, so no hour yet.';
-    return;
-  }
+  if (!CONFIG.ca){ st.querySelector('span').textContent = 'feed offline'; return; }
   try{
     const r = await fetch(`/api/coin?ca=${encodeURIComponent(CONFIG.ca)}&fee=${CONFIG.fee}`).then(r=>r.json());
     if (r.potPerHour != null) $('#s-pot').textContent = usd(r.potPerHour);
@@ -435,7 +596,7 @@ $('#b-check').addEventListener('click', async ()=>{
     if (!r.exists){ out.innerHTML = 'X did not return that post. It may be private, deleted, or the id is wrong.'; return; }
     const views = r.views == null
       ? '<b>—</b>  (this source does not report views)'
-      : '<b class="g" style="color:var(--gold)">'+num(r.views)+'</b>';
+      : '<b class="gold">'+num(r.views)+'</b>';
     out.innerHTML =
       '  handle   <b>@'+(r.handle||'—')+'</b>\n'+
       '  views    '+views+'\n'+
@@ -446,6 +607,30 @@ $('#b-check').addEventListener('click', async ()=>{
         : '  If this were the most-viewed post about $POT this hour, the whole pot would go to @'+r.handle+' in dollars. Nothing to claim.');
   }catch{
     $('#ck-src').textContent = 'error';
+    out.innerHTML = 'Could not reach X from here. Try again in a moment.';
+  }
+});
+
+/* check a handle */
+$('#b-hclear').addEventListener('click', ()=>{ $('#f-h').value=''; $('#o-handle').hidden=true; $('#hk-src').textContent='idle'; });
+$('#b-handle').addEventListener('click', async ()=>{
+  const v = $('#f-h').value.trim().replace(/^@/,''), out = $('#o-handle');
+  out.hidden = false;
+  if (!/^[A-Za-z0-9_]{1,15}$/.test(v)){ out.innerHTML = 'That is not a valid X handle. Letters, numbers and underscores, up to 15.'; return; }
+  out.innerHTML = 'reading from X…'; $('#hk-src').textContent = 'fetching';
+  try{
+    const r = await fetch('/api/handle?h='+encodeURIComponent(v)).then(r=>r.json());
+    $('#hk-src').textContent = r.src || 'none';
+    if (!r.exists){ out.innerHTML = 'X did not return that handle. It may not exist, or it may be protected.'; return; }
+    out.innerHTML =
+      '  handle    <b>@'+r.handle+'</b>\n'+
+      '  name      <b>'+(r.name||'—')+'</b>\n'+
+      '  followers <b>'+num(r.followers)+'</b>\n'+
+      '  source    <b>'+r.src+'</b>\n\n'+
+      '  This handle can be paid in dollars through X Money without connecting anything.\n'+
+      '  We check an account exists before a single dollar is sent to it.';
+  }catch{
+    $('#hk-src').textContent = 'error';
     out.innerHTML = 'Could not reach X from here. Try again in a moment.';
   }
 });
@@ -461,11 +646,52 @@ function model(){
   $('#m-bar').textContent = '['+'█'.repeat(filled)+'░'.repeat(40-filled)+'] '+fee.toFixed(2)+'% of 3.00% cap';
   $('#o-model').innerHTML =
     '  '+num(vol)+' × '+fee.toFixed(2)+'%  =  <b>'+usd(day)+'</b> a day\n'+
-    '  '+usd(day)+' ÷ 24  =  <b class="g" style="color:var(--gold)">'+usd(hour)+'</b> to one person, every hour';
+    '  '+usd(day)+' ÷ 24  =  <b class="gold">'+usd(hour)+'</b> to one person, every hour';
+  $('#m-tbl').innerHTML = [10000,100000,250000,1000000,5000000].map(v=>{
+    const d = v*(fee/100);
+    return `<tr><td><b>$${v.toLocaleString('en-US')}</b></td><td>${usd(d)}</td><td class="gold">${usd(d/24)}</td></tr>`;
+  }).join('');
 }
 $('#f-vol').addEventListener('input', model);
 $('#f-fee').addEventListener('input', model);
 model();
+
+/* live probes against our own readers */
+async function probe(){
+  const jobs = {
+    handle: ['/api/handle?h=elonmusk',            r => r.exists === true],
+    tweet:  ['/api/tweet?id='+PROBE_POST,         r => r.exists === true],
+    coin:   ['/api/coin?ca='+PROBE_MINT+'&fee=1', r => r.hasPair === true],
+  };
+  for (const [key, [url, ok]] of Object.entries(jobs)){
+    const row = document.querySelector(`#probe-body tr[data-p="${key}"]`);
+    row.querySelector('.st').className = 'st wait';
+    row.querySelector('.st').textContent = 'probing';
+    const t0 = performance.now();
+    try{
+      const r = await fetch(url).then(r=>r.json());
+      const good = ok(r);
+      row.querySelector('.st').className = 'st ' + (good ? 'ok' : 'bad');
+      row.querySelector('.st').textContent = good ? 'responding' : 'reachable, no data';
+    }catch{
+      row.querySelector('.st').className = 'st bad';
+      row.querySelector('.st').textContent = 'unreachable';
+    }
+    row.querySelector('.ms').textContent = Math.round(performance.now()-t0);
+  }
+  // the avatar probe is an image, not json
+  const row = document.querySelector('#probe-body tr[data-p="avatar"]');
+  row.querySelector('.st').className = 'st wait';
+  row.querySelector('.st').textContent = 'probing';
+  const t0 = performance.now();
+  const img = new Image();
+  img.onload  = ()=>{ row.querySelector('.st').className='st ok';  row.querySelector('.st').textContent='responding'; row.querySelector('.ms').textContent=Math.round(performance.now()-t0); };
+  img.onerror = ()=>{ row.querySelector('.st').className='st bad'; row.querySelector('.st').textContent='unreachable'; row.querySelector('.ms').textContent=Math.round(performance.now()-t0); };
+  img.referrerPolicy = 'no-referrer';
+  img.src = '/api/avatar?h=cobie&t=' + Date.now();
+}
+$('#b-probe').addEventListener('click', probe);
+probe();
 </script>
 </body>
 </html>

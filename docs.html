@@ -1,0 +1,925 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>POT — docs</title>
+<meta name="description" content="How the POT hour is funded, judged and settled, written down in full: the economics, the eligibility rules, the settlement order, and every reader the site runs on.">
+<link rel="icon" href="assets/favicon-32.png" sizes="32x32">
+<link rel="icon" href="assets/favicon-64.png" sizes="64x64">
+<link rel="apple-touch-icon" href="assets/favicon-180.png">
+<meta property="og:title" content="POT — docs">
+<meta property="og:description" content="The whole mechanic, written down so it cannot be changed quietly.">
+<meta property="og:image" content="assets/pfp.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#030305; --panel:#08090c; --hair:rgba(255,255,255,.10);
+  --white:#f2f3f5; --grey:#8b909c; --dim:#565b66;
+  --gold:#f0b23a; --green:#4ac97e; --red:#e5484d;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{overflow-x:hidden;scroll-behavior:smooth}
+body{overflow-x:clip;margin:0;background:var(--bg);color:var(--white);
+  font-family:var(--mono);font-size:14.5px;line-height:1.7;-webkit-font-smoothing:antialiased}
+[hidden]{display:none!important}
+a{color:inherit}
+pre{margin:0;font-family:var(--mono)}
+.gold{color:var(--gold)} .grn{color:var(--green)} .red{color:var(--red)}
+
+.crt{position:fixed;inset:0;pointer-events:none;z-index:60;background:#000;
+  animation:crt 7.2s ease-in-out infinite;will-change:opacity}
+@keyframes crt{
+  0%{opacity:.012} 14%{opacity:.055} 27%{opacity:.018} 41%{opacity:.07}
+  55%{opacity:.024} 68%{opacity:.048} 82%{opacity:.014} 100%{opacity:.012}
+}
+
+nav{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;
+  padding:14px 20px;border-bottom:1px solid var(--hair);position:sticky;top:0;z-index:40;
+  background:rgba(3,3,5,.9);backdrop-filter:blur(8px)}
+nav .sp{min-width:0}
+nav .links{display:flex;justify-content:center;gap:7px;flex-wrap:wrap}
+nav a{font-size:12.5px;color:var(--dim);text-decoration:none;padding:3px 2px;transition:.15s}
+nav a::before{content:"[";color:var(--dim);margin-right:3px}
+nav a::after{content:"]";color:var(--dim);margin-left:3px}
+nav a:hover{color:var(--white)}
+nav a.on{color:var(--gold)}
+nav a.on::before,nav a.on::after{color:var(--gold)}
+#mb{display:none;background:none;border:1px solid var(--hair);color:var(--white);
+  padding:6px 10px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+
+.btn{display:inline-block;padding:9px 16px;font-size:13px;font-family:var(--mono);
+  text-decoration:none;cursor:pointer;border:1px solid var(--hair);background:transparent;
+  color:var(--white);transition:.15s}
+.btn:hover{border-color:var(--gold);color:var(--gold)}
+.btn.solid{background:var(--gold);color:#120c02;border-color:var(--gold);font-weight:600}
+.btn.solid:hover{background:#ffc862}
+.btn.sm{padding:5px 10px;font-size:11.5px}
+
+/* --- masthead ------------------------------------------------------- */
+.mast{border-bottom:1px solid var(--hair);padding:40px 24px 30px}
+.mast .in{max-width:1320px;margin:0 auto}
+.crumb{font-size:11px;letter-spacing:.14em;color:var(--dim);text-transform:uppercase;margin:0 0 14px}
+.crumb a{text-decoration:none;color:var(--dim)} .crumb a:hover{color:var(--white)}
+.mast h1{font-size:clamp(23px,3.4vw,33px);margin:0 0 10px;font-weight:600;letter-spacing:-.02em}
+.mast h1 em{font-style:normal;color:var(--gold)}
+.mast p{color:var(--grey);max-width:74ch;margin:0;font-size:13.5px}
+.meta{display:flex;gap:22px;flex-wrap:wrap;margin-top:20px;font-size:11px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.meta b{display:block;margin-top:5px;color:var(--white);font-weight:500;
+  letter-spacing:0;text-transform:none;font-size:12.5px}
+.meta span{display:block}
+
+/* --- three columns --------------------------------------------------- */
+.doc{max-width:1320px;margin:0 auto;display:grid;
+  grid-template-columns:236px minmax(0,1fr) 196px;gap:0;align-items:start}
+.side{position:sticky;top:57px;max-height:calc(100vh - 57px);overflow-y:auto;
+  border-right:1px solid var(--hair);padding:28px 18px 60px}
+.side::-webkit-scrollbar{width:5px}
+.side::-webkit-scrollbar-thumb{background:var(--hair)}
+.side .ph{font-size:10px;letter-spacing:.16em;color:var(--dim);text-transform:uppercase;
+  margin:22px 0 9px;padding-left:9px}
+.side .ph:first-child{margin-top:0}
+.side a{display:block;text-decoration:none;color:var(--grey);font-size:12.5px;
+  padding:5px 9px;border-left:1px solid var(--hair);transition:.15s}
+.side a:hover{color:var(--white);border-left-color:var(--dim)}
+.side a.on{color:var(--gold);border-left-color:var(--gold);background:rgba(240,178,58,.05)}
+
+.art{padding:30px 34px 90px;min-width:0}
+.toc{position:sticky;top:57px;padding:30px 18px 60px;border-left:1px solid var(--hair)}
+.toc .ph{font-size:10px;letter-spacing:.16em;color:var(--dim);text-transform:uppercase;margin:0 0 11px}
+.toc a{display:block;text-decoration:none;color:var(--dim);font-size:11.5px;
+  padding:4px 0;line-height:1.45;transition:.15s}
+.toc a:hover{color:var(--white)}
+.toc a.on{color:var(--gold)}
+.toc a.sub{padding-left:11px;font-size:11px}
+
+/* --- article ---------------------------------------------------------- */
+.sec{padding:0 0 46px;scroll-margin-top:74px}
+.sec+.sec{border-top:1px solid var(--hair);padding-top:40px}
+.eyebrow{color:var(--dim);font-size:11.5px;letter-spacing:.1em;margin:0 0 14px;
+  display:flex;align-items:center;gap:10px}
+.eyebrow b{color:var(--gold);font-weight:600}
+.eyebrow i{flex:1;height:1px;background:var(--hair);display:block}
+.art h2{font-size:clamp(18px,2.4vw,23px);font-weight:600;margin:0 0 12px;letter-spacing:-.01em}
+.art h2 em{font-style:normal;color:var(--gold)}
+.art h3{font-size:14.5px;font-weight:600;margin:28px 0 8px;scroll-margin-top:74px}
+.art h3::before{content:"# ";color:var(--dim)}
+.art p{color:var(--grey);max-width:78ch;margin:0 0 14px;font-size:13.5px}
+.art p b,.art li b{color:var(--white);font-weight:600}
+.art p code,.art li code,td code{background:#0d0f13;border:1px solid var(--hair);
+  padding:1px 5px;font-size:12.5px;color:var(--gold)}
+.art a.lnk{color:var(--gold);text-underline-offset:3px}
+
+.box{border:1px solid var(--hair);background:var(--panel);padding:18px;margin:16px 0}
+.box .bt{color:var(--dim);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  margin:0 0 14px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.box.pad0{padding:0}
+.note{border-left:2px solid var(--gold);background:rgba(240,178,58,.045);
+  padding:14px 16px;margin:16px 0}
+.note p{margin:0;font-size:13px;color:var(--grey)}
+.note .nt{color:var(--gold);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;display:block;margin-bottom:6px}
+.note.warn{border-left-color:var(--red);background:rgba(229,72,77,.05)}
+.note.warn .nt{color:var(--red)}
+
+ul.list{margin:0 0 14px;padding:0;list-style:none}
+ul.list li{color:var(--grey);font-size:13px;padding:7px 0 7px 18px;position:relative;
+  border-bottom:1px solid var(--hair)}
+ul.list li:last-child{border-bottom:0}
+ul.list li::before{content:"·";position:absolute;left:4px;color:var(--gold)}
+ul.plain{margin:0 0 14px;padding-left:20px;color:var(--grey);font-size:13px}
+ul.plain li{margin:5px 0}
+
+table.tbl{width:100%;border-collapse:collapse;font-size:12.5px}
+table.tbl th{text-align:left;color:var(--dim);font-weight:500;font-size:10.5px;
+  letter-spacing:.12em;text-transform:uppercase;padding:11px 14px;border-bottom:1px solid var(--hair)}
+table.tbl td{padding:10px 14px;border-bottom:1px solid var(--hair);color:var(--grey);
+  vertical-align:top}
+table.tbl tr:last-child td{border-bottom:0}
+table.tbl td b{color:var(--white);font-weight:600}
+table.tbl td.nowrap{white-space:nowrap}
+
+.rows{border-top:1px solid var(--hair)}
+.rows .r{display:grid;grid-template-columns:62px 1fr;gap:14px;padding:14px 0;
+  border-bottom:1px solid var(--hair);align-items:start}
+.rows .r:last-child{border-bottom:0}
+.rows .n{color:var(--gold);font-size:12px}
+.rows h4{margin:0 0 4px;font-size:14px;font-weight:600}
+.rows p{margin:0;color:var(--grey);font-size:13px;max-width:none}
+
+.code{background:#050608;border:1px solid var(--hair);padding:15px 16px;overflow-x:auto;
+  font-size:12.5px;line-height:1.72;color:var(--grey);margin:14px 0;
+  white-space:pre;-webkit-overflow-scrolling:touch}
+.code .k{color:var(--gold)} .code .c{color:var(--dim)} .code .s{color:var(--green)}
+
+/* endpoint blocks */
+.ep{border:1px solid var(--hair);background:var(--panel);margin:16px 0}
+.ep .hd{display:flex;justify-content:space-between;align-items:center;gap:12px;
+  flex-wrap:wrap;padding:13px 16px;border-bottom:1px solid var(--hair)}
+.ep .path{font-size:13.5px;font-weight:600}
+.ep .path .verb{color:var(--green);margin-right:8px;font-size:11px;letter-spacing:.1em}
+.ep .bd{padding:15px 16px}
+.ep p{margin:0 0 12px;font-size:13px}
+.ep p:last-child{margin-bottom:0}
+.ep .res{margin-top:13px;border-top:1px solid var(--hair);padding-top:13px;
+  font-size:12px;white-space:pre-wrap;word-break:break-word;color:var(--grey);
+  max-height:290px;overflow:auto}
+.ep .res b{color:var(--white)}
+
+.pill{display:inline-block;white-space:nowrap;font-size:10px;letter-spacing:.1em;
+  text-transform:uppercase;padding:2px 7px;border:1px solid var(--hair);color:var(--dim)}
+.pill.live{color:var(--green);border-color:rgba(74,201,126,.4)}
+.pill.soon{color:var(--gold);border-color:rgba(240,178,58,.4)}
+.pill.no{color:var(--red);border-color:rgba(229,72,77,.4)}
+
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.vs .col{border:1px solid var(--hair);background:var(--panel);padding:18px}
+.vs .col.hi{border-color:rgba(240,178,58,.4)}
+.vs .ch{font-size:11px;letter-spacing:.14em;color:var(--dim);margin-bottom:12px}
+.vs .col.hi .ch{color:var(--gold)}
+
+dl.gloss{margin:0;border-top:1px solid var(--hair)}
+dl.gloss dt{color:var(--white);font-weight:600;font-size:13.5px;padding:14px 0 3px}
+dl.gloss dd{margin:0 0 14px;color:var(--grey);font-size:13px;
+  border-bottom:1px solid var(--hair);padding-bottom:14px;max-width:78ch}
+dl.gloss dd:last-child{border-bottom:0}
+
+.foot{border-top:1px solid var(--hair);padding:26px 24px 60px;text-align:center}
+.foot p{color:var(--dim);font-size:12px;margin:0 0 14px;max-width:none}
+
+.rv{opacity:0;transform:translateY(10px);transition:opacity .45s ease,transform .45s ease}
+.rv.vis{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  .rv{opacity:1;transform:none;transition:none}
+  .crt{animation:none;opacity:0}
+}
+@media(max-width:1180px){
+  .doc{grid-template-columns:220px minmax(0,1fr)}
+  .toc{display:none}
+}
+@media(max-width:860px){
+  .doc{grid-template-columns:1fr}
+  .side{position:static;max-height:none;border-right:0;border-bottom:1px solid var(--hair);
+    padding:18px 16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:2px 14px}
+  .side .ph{grid-column:1/-1;margin:12px 0 4px}
+  .side .ph:first-child{margin-top:0}
+  .art{padding:26px 16px 70px}
+  .vs{grid-template-columns:1fr}
+  .mast{padding:30px 16px 24px}
+  table.tbl{font-size:11.5px} table.tbl th,table.tbl td{padding:9px 8px}
+}
+@media(max-width:700px){
+  nav{grid-template-columns:1fr auto}
+  nav .sp:first-child{display:none}
+  nav .links{display:none;grid-column:1/-1;flex-direction:column;align-items:center;gap:10px;padding-top:10px}
+  nav .links.open{display:flex}
+  #mb{display:block}
+}
+</style>
+</head>
+<body>
+<div class="crt" aria-hidden="true"></div>
+
+<nav>
+  <div class="sp"></div>
+  <div class="links" id="menu">
+    <a href="index.html">home</a>
+    <a href="index.html#check">check</a>
+    <a href="index.html#model">model</a>
+    <a href="index.html#rundown">rundown</a>
+    <a href="index.html#faq">faq</a>
+    <a href="docs.html" class="on">docs</a>
+  </div>
+  <div class="sp" style="text-align:right"><button id="mb" aria-label="Menu">menu</button></div>
+</nav>
+
+<header class="mast">
+  <div class="in">
+    <p class="crumb"><a href="index.html">POT</a> &nbsp;/&nbsp; documentation</p>
+    <h1>The hour, <em>written down.</em></h1>
+    <p>Everything the mechanic does, in the order it does it: where the money comes from, which
+      posts count, how the winner is picked, what happens when it goes wrong, and every reader
+      this site runs on. Written down so it cannot be changed quietly.</p>
+    <div class="meta">
+      <span>Version<b>0.3 — pre-launch</b></span>
+      <span>Chain<b>Solana · pump.fun</b></span>
+      <span>Rail<b>X Money</b></span>
+      <span>Status<b class="gold">no mint yet</b></span>
+    </div>
+  </div>
+</header>
+
+<div class="doc">
+
+  <aside class="side">
+    <p class="ph">Start</p>
+    <a href="#overview">Overview</a>
+    <a href="#rule">The rule</a>
+    <a href="#vocab">Vocabulary</a>
+
+    <p class="ph">Mechanics</p>
+    <a href="#economics">Economics</a>
+    <a href="#eligibility">Eligibility</a>
+    <a href="#settlement">Settlement</a>
+    <a href="#edge">Edge cases</a>
+    <a href="#ratelimit">The rate limit</a>
+
+    <p class="ph">Readers</p>
+    <a href="#readers">Overview</a>
+    <a href="#ep-tweet">/api/tweet</a>
+    <a href="#ep-handle">/api/handle</a>
+    <a href="#ep-avatar">/api/avatar</a>
+    <a href="#ep-coin">/api/coin</a>
+    <a href="#errors">Errors</a>
+
+    <p class="ph">Honesty</p>
+    <a href="#live">What is live</a>
+    <a href="#notchain">Not on chain yet</a>
+    <a href="#scam">Scams</a>
+    <a href="#changelog">Changelog</a>
+  </aside>
+
+  <main class="art">
+
+    <section class="sec rv" id="overview">
+      <p class="eyebrow"><b>01</b> &mdash; overview <i></i></p>
+      <h2>What this <em>actually is</em></h2>
+      <p>POT is a coin on pump.fun with one mechanic attached to it. The creator fee that every
+        trade pays does not go to a wallet. It fills a pot. At the top of every hour the whole pot
+        is sent, in dollars, to the X handle whose post about $POT got the most views during that
+        hour.</p>
+      <p>The recipient does nothing. They do not connect a wallet, they do not paste a code into
+        their bio, they do not sign a message, and there is no window after which the money goes
+        back. X Money sends dollars to any X handle for free, and the handle already proved it was
+        theirs by posting from it. <b>There is nothing to claim.</b></p>
+      <p>That is the whole product. Everything below is the detail underneath it.</p>
+      <div class="note">
+        <span class="nt">The short version</span>
+        <p>The thing that grows this coin and the thing that pays out are the same action. Post
+          about it, win the hour.</p>
+      </div>
+    </section>
+
+    <section class="sec rv" id="rule">
+      <p class="eyebrow"><b>02</b> &mdash; the rule <i></i></p>
+      <h2>One pot. One winner. <em>Every hour.</em></h2>
+      <p>There is no application, no allowlist, and no discretion anywhere in this. Nobody decides
+        who deserves the hour. The hour decides.</p>
+      <div class="box pad0">
+        <div class="rows" style="border-top:0">
+          <div class="r"><div class="n">01</div><div><h4>The fee fills it</h4>
+            <p>100% of the creator fee on every $POT trade goes into the pot. Nothing is skimmed, held
+              back for a treasury, or routed to a team wallet.</p></div></div>
+          <div class="r"><div class="n">02</div><div><h4>The hour judges it</h4>
+            <p>Every public post naming $POT inside that hour is read. The one with the most views
+              at settlement wins. Not engagement, not quality, not follower count &mdash; views.</p></div></div>
+          <div class="r"><div class="n">03</div><div><h4>X Money sends it</h4>
+            <p>Dollars, to the handle, through X Money. Not tokens, not points, not a voucher.</p></div></div>
+          <div class="r"><div class="n">04</div><div><h4>The receipt records it</h4>
+            <p>A public post naming the winner, the post, the view count and the amount. That post
+              is the record, and the rundown row points at it.</p></div></div>
+        </div>
+      </div>
+      <h3 id="rule-why">Why views and not engagement</h3>
+      <p>Likes and reposts can be bought for less than an hour's pot is worth, which would make the
+        mechanic a market for fake engagement rather than a market for attention. Views are the one
+        number on a post that tracks how many people actually saw it, and the one the platform is
+        most motivated to keep honest. It is not a perfect number. It is the least gameable one
+        available, and it is the number X itself publishes.</p>
+      <p>It also has the property that matters most here: a post can win on reach without its
+        author having any followers at all, if the timeline decides to carry it.</p>
+    </section>
+
+    <section class="sec rv" id="vocab">
+      <p class="eyebrow"><b>03</b> &mdash; vocabulary <i></i></p>
+      <h2>Words this site uses <em>in a specific way</em></h2>
+      <p>Where a word below appears anywhere on this site, it means exactly this and nothing
+        looser.</p>
+      <dl class="gloss">
+        <dt>The pot</dt>
+        <dd>The creator-fee balance accumulated since the last payout. Not a treasury, not a
+          reserve, not a share of supply. It is emptied completely every hour &mdash; there is no
+          rollover and no carry.</dd>
+        <dt>The hour</dt>
+        <dd>A clock hour in UTC, from :00:00 to :59:59. A post belongs to the hour it was published
+          in, never the hour it was seen in.</dd>
+        <dt>Settlement</dt>
+        <dd>The four-minute sequence after an hour closes, in which views are read, a winner is
+          ranked, dollars are sent and a receipt is posted. Described in full in
+          <a class="lnk" href="#settlement">Settlement</a>.</dd>
+        <dt>Views</dt>
+        <dd>The view count X reports for a post, read once at settlement. The number recorded is the
+          number at that moment. Later drift &mdash; up or down &mdash; never reopens a settled
+          hour.</dd>
+        <dt>The receipt</dt>
+        <dd>The public post published after a payout, carrying the handle, the post, the view count
+          and the amount. A payout with no receipt did not happen.</dd>
+        <dt>The rundown</dt>
+        <dd>The table of every settled hour since launch. It only ever grows. Nothing is
+          back-filled, nothing is estimated, and no hour is ever removed from it.</dd>
+        <dt>A dash</dt>
+        <dd>Not zero. A dash means the site has no number, usually because the coin does not exist
+          yet or a reader is unreachable. A zero would claim we looked and found nothing. Where this
+          site does not know, it says so.</dd>
+      </dl>
+    </section>
+
+    <section class="sec rv" id="economics">
+      <p class="eyebrow"><b>04</b> &mdash; economics <i></i></p>
+      <h2>Where the money <em>comes from</em></h2>
+      <p>Trading fees, and nowhere else. No treasury, no allocation, no outside funding, no buyback.
+        If nobody trades, the pot is empty, and the site will say the pot is empty rather than
+        inventing a number.</p>
+      <p>On pump.fun the creator fee is set once, at launch, and is capped at <b>3.00%</b>. All of
+        whatever it is set to is the pot. That gives a formula with nothing hidden in it:</p>
+      <div class="code"><span class="c"># every figure on the site derives from these two lines</span>
+pot_per_day  = volume_24h &times; (creator_fee_pct / 100)
+pot_per_hour = pot_per_day / 24</div>
+      <p>Worked through at a 1.00% fee, which is the figure the model on the front page defaults
+        to:</p>
+      <div class="box pad0">
+        <table class="tbl">
+          <thead><tr><th>24h volume</th><th>pot per day</th><th>pot per hour</th><th>per week</th></tr></thead>
+          <tbody>
+            <tr><td><b>$100,000</b></td><td>$1,000.00</td><td class="gold">$41.67</td><td>$7,000</td></tr>
+            <tr><td><b>$250,000</b></td><td>$2,500.00</td><td class="gold">$104.17</td><td>$17,500</td></tr>
+            <tr><td><b>$1,000,000</b></td><td>$10,000.00</td><td class="gold">$416.67</td><td>$70,000</td></tr>
+            <tr><td><b>$5,000,000</b></td><td>$50,000.00</td><td class="gold">$2,083.33</td><td>$350,000</td></tr>
+            <tr><td><b>$10,000,000</b></td><td>$100,000.00</td><td class="gold">$4,166.67</td><td>$700,000</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>At the 3.00% cap those numbers triple: $1,000,000 of daily volume funds a
+        <b>$1,250.00</b> pot every hour. The model on the front page runs the same arithmetic live,
+        and <code>/api/coin</code> runs it against real volume once a pair exists.</p>
+      <div class="note">
+        <span class="nt">What this does not promise</span>
+        <p>Volume is not a forecast. Every number in that table is a function of a volume figure you
+          chose, not a claim about what volume will be. Until there is a pair, the front page shows
+          dashes for all of it.</p>
+      </div>
+      <h3 id="economics-fx">Dollars, not tokens</h3>
+      <p>The pot accrues in SOL and pays out in dollars, so a conversion happens at settlement. The
+        amount published in the receipt is the dollar amount that was actually sent, after that
+        conversion &mdash; not the SOL value at the top of the hour. If the two differ, the receipt
+        is the one that is true.</p>
+    </section>
+
+    <section class="sec rv" id="eligibility">
+      <p class="eyebrow"><b>05</b> &mdash; eligibility <i></i></p>
+      <h2>Which posts <em>count</em></h2>
+      <p>The list is short on purpose. Every line is a thing a machine can check, because a rule a
+        person has to interpret is a rule that can be bent later.</p>
+      <div class="vs">
+        <div class="col hi">
+          <div class="ch">ELIGIBLE — A POST MUST</div>
+          <ul class="list">
+            <li>be public and readable through X's own endpoints</li>
+            <li>name $POT in its text</li>
+            <li>have been posted inside the hour being settled</li>
+            <li>report a view count &mdash; without one it cannot be ranked</li>
+            <li>come from a handle not already paid today</li>
+          </ul>
+        </div>
+        <div class="col">
+          <div class="ch">NOT ELIGIBLE — A POST THAT</div>
+          <ul class="list">
+            <li>is private, protected, or deleted before settlement</li>
+            <li>was edited after the hour closed</li>
+            <li>comes from an account created inside the same hour</li>
+            <li>is a repost &mdash; the original wins, not the repost</li>
+            <li>comes from the $POT account itself</li>
+          </ul>
+        </div>
+      </div>
+      <h3 id="eligibility-content">What the post has to say</h3>
+      <p>Nothing, beyond naming $POT. There is no rule about tone, length, format or sentiment, and
+        in particular <b>there is no rule that it has to be complimentary</b>. A post calling the
+        whole thing a scam is eligible and will win the hour if it gets the views. That is not an
+        oversight and it will not be patched.</p>
+      <p>There is no requirement to tag the account, use a hashtag, include a link, or hold the
+        coin. Holding funds the pot; posting wins it; the two are separate.</p>
+    </section>
+
+    <section class="sec rv" id="settlement">
+      <p class="eyebrow"><b>06</b> &mdash; settlement <i></i></p>
+      <h2>How an hour is <em>actually settled</em></h2>
+      <p>Four minutes, in a fixed order, starting the second the hour closes. Times are UTC and are
+        the same every hour, including the ones nobody is watching.</p>
+      <div class="box pad0">
+        <div class="rows" style="border-top:0">
+          <div class="r"><div class="n">T+0</div><div><h4>The hour closes</h4>
+            <p>Posts made after this second belong to the next hour, not this one. The boundary is the
+              publish timestamp X reports, not the time the post was read.</p></div></div>
+          <div class="r"><div class="n">T+1m</div><div><h4>Views are read</h4>
+            <p>Every eligible post is read once, through <code>/api/tweet</code>. The number recorded
+              is the number at that moment and it is the number published. Later drift never changes a
+              settled hour.</p></div></div>
+          <div class="r"><div class="n">T+2m</div><div><h4>The winner is ranked</h4>
+            <p>Highest views takes it. A tie goes to whichever post was published earlier. If the top
+              handle has already been paid today, it is skipped and the pot passes to the next post
+              down.</p></div></div>
+          <div class="r"><div class="n">T+3m</div><div><h4>The dollars send</h4>
+            <p>Through X Money, to the handle, in dollars. The recipient does nothing and is not asked
+              for anything.</p></div></div>
+          <div class="r"><div class="n">T+4m</div><div><h4>The receipt posts</h4>
+            <p>A public post carrying the handle, the post, the view count and the amount. That post
+              is the record, and it is the row that appears in the rundown.</p></div></div>
+        </div>
+      </div>
+      <h3 id="settlement-algo">The ranking, as written</h3>
+      <p>The tie-break and skip rules in one place, so there is no ambiguity about the order they
+        apply in:</p>
+      <div class="code"><span class="c">// posts: every public post naming $POT published inside [hourStart, hourEnd)</span>
+<span class="k">const</span> ranked = posts
+  .filter(p =&gt; p.views !== <span class="k">null</span>)              <span class="c">// unranked without a view count</span>
+  .filter(p =&gt; !p.isRepost &amp;&amp; !p.editedAfter(hourEnd))
+  .filter(p =&gt; p.handle !== <span class="s">'POT'</span>)
+  .sort((a, b) =&gt;
+     b.views - a.views                        <span class="c">// 1. most views</span>
+  || a.createdAt - b.createdAt);              <span class="c">// 2. tie -&gt; published earlier</span>
+
+<span class="k">const</span> winner = ranked.find(p =&gt; !paidToday.has(p.handle));
+<span class="c">// no eligible post -&gt; the hour pays nothing and says so in the rundown</span></div>
+      <p>If no post qualifies, the hour pays nothing. It still gets a rundown row, marked as unpaid,
+        rather than being skipped &mdash; an hour missing from the table would be indistinguishable
+        from an hour quietly withheld.</p>
+      <div class="note">
+        <span class="nt">The unpaid hour</span>
+        <p>An unpaid hour does not roll its pot forward. The fee that accrued during it goes into the
+          next hour's pot by accident of timing, not by rule &mdash; the pot is simply whatever the fee
+          has collected since the last payout.</p>
+      </div>
+    </section>
+
+    <section class="sec rv" id="edge">
+      <p class="eyebrow"><b>07</b> &mdash; edge cases <i></i></p>
+      <h2>When it <em>goes wrong</em></h2>
+      <p>Every one of these has a stated answer, decided before it happens rather than after
+        somebody loses.</p>
+      <div class="box pad0">
+        <table class="tbl">
+          <thead><tr><th style="width:38%">If</th><th>then</th></tr></thead>
+          <tbody>
+            <tr><td><b>The winning post is deleted before the money sends</b></td>
+              <td>The hour passes to the next post down. A post that is not there at settlement cannot
+                be the record of anything.</td></tr>
+            <tr><td><b>The winning post is deleted after the money sends</b></td>
+              <td>Nothing is reversed. The receipt stands and the rundown row keeps the dead link,
+                marked as deleted.</td></tr>
+            <tr><td><b>X's view count is unavailable for a post</b></td>
+              <td>That post cannot be ranked and is skipped. It is not treated as zero views.</td></tr>
+            <tr><td><b>X is unreachable at settlement time</b></td>
+              <td>Settlement retries for up to fifteen minutes, then the hour is marked unpaid in the
+                rundown with the reason stated. It is not settled later from stale numbers.</td></tr>
+            <tr><td><b>The winner's X Money is not set up</b></td>
+              <td>The payment sits pending on X's side, where X handles it. The pot is still spent and
+                the receipt is still published.</td></tr>
+            <tr><td><b>Two accounts post identical text</b></td>
+              <td>No special handling. Whichever got more views wins; a tie goes to whoever published
+                first.</td></tr>
+            <tr><td><b>An account wins twice in a day</b></td>
+              <td>It cannot. The second win is skipped at ranking time and the pot passes down. See
+                <a class="lnk" href="#ratelimit">the rate limit</a>.</td></tr>
+            <tr><td><b>Trading volume is zero for an hour</b></td>
+              <td>The pot is zero and nothing sends. The rundown row says $0.00 rather than being
+                omitted.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="sec rv" id="ratelimit">
+      <p class="eyebrow"><b>08</b> &mdash; the rate limit <i></i></p>
+      <h2>Why <em>one</em> winner an hour</h2>
+      <p>X Money allows one payment per person per day. That is the rail's rule, not a design
+        choice made here &mdash; and the shape of the mechanic follows from it rather than fighting
+        it.</p>
+      <p>A design that sprayed a hundred small payments an hour would hit that ceiling immediately
+        and spend most of its time explaining why someone did not get paid. One winner an hour is
+        <b>24 payments a day to 24 different handles</b>, which sits comfortably inside the limit
+        and never has to queue anything.</p>
+      <p>It also makes each win worth posting about. A pot split a hundred ways is a rounding error
+        nobody screenshots; the whole hour to one person is a number worth showing people.</p>
+      <div class="note">
+        <span class="nt">The consequence, stated plainly</span>
+        <p>If you win an hour, you are ineligible for the rest of that UTC day. You can still post,
+          and your posts still count toward nothing &mdash; the hour will pass to the next handle
+          down. This resets at 00:00 UTC.</p>
+      </div>
+    </section>
+
+    <section class="sec rv" id="readers">
+      <p class="eyebrow"><b>09</b> &mdash; readers <i></i></p>
+      <h2>Every endpoint <em>this site runs on</em></h2>
+      <p>The site has four readers and no database. Nothing is cached in a way that could go stale
+        without saying so, and nothing writes. Each one is documented below with a button that calls
+        it live, from your browser, right now &mdash; so you can see what it actually returns rather
+        than what this page claims it returns.</p>
+      <div class="box pad0">
+        <table class="tbl">
+          <thead><tr><th>endpoint</th><th>reads</th><th>source</th><th>state</th></tr></thead>
+          <tbody>
+            <tr><td><b>/api/tweet</b></td><td>a post's views and author</td><td>FxTwitter, then syndication</td><td><span class="pill live">live</span></td></tr>
+            <tr><td><b>/api/handle</b></td><td>an account's name and followers</td><td>FxTwitter, then syndication</td><td><span class="pill live">live</span></td></tr>
+            <tr><td><b>/api/avatar</b></td><td>an account's picture</td><td>resolved, then proxied</td><td><span class="pill live">live</span></td></tr>
+            <tr><td><b>/api/coin</b></td><td>price, volume, pot size</td><td>Dexscreener (solana)</td><td><span class="pill soon">no mint yet</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note">
+        <span class="nt">One thing worth knowing</span>
+        <p>Only FxTwitter reports view counts. The syndication fallback does not carry them, so when
+          it is the source, <code>views</code> comes back as <code>null</code> and never as
+          <code>0</code>. A post read through the fallback cannot be ranked &mdash; which is exactly
+          the eligibility rule above, and why it is written that way.</p>
+      </div>
+    </section>
+
+    <section class="sec rv" id="ep-tweet">
+      <p class="eyebrow"><b>10</b> &mdash; reader <i></i></p>
+      <div class="ep">
+        <div class="hd">
+          <span class="path"><span class="verb">GET</span>/api/tweet</span>
+          <button class="btn sm" data-try="/api/tweet?id=1519480761749016577">try it</button>
+        </div>
+        <div class="bd">
+          <p>Reads one post. This is the endpoint settlement ranks on, so its behaviour around
+            missing view counts is the whole mechanic's behaviour around them.</p>
+          <table class="tbl" style="margin:6px 0 10px">
+            <thead><tr><th style="width:110px">param</th><th>meaning</th></tr></thead>
+            <tbody>
+              <tr><td class="nowrap"><code>id</code></td><td>a numeric post id</td></tr>
+              <tr><td class="nowrap"><code>url</code></td><td>a full x.com or twitter.com post URL &mdash; the id is parsed out of it. Either param works; <code>id</code> wins if both are sent.</td></tr>
+            </tbody>
+          </table>
+          <p>Returns <code>views</code>, <code>likes</code>, <code>reposts</code>,
+            <code>replies</code>, <code>text</code>, <code>created</code>, <code>handle</code>,
+            <code>name</code>, <code>avatar</code>, <code>url</code>, <code>exists</code> and
+            <code>src</code>. <code>src</code> is <code>fxtwitter</code>, <code>syndication</code>
+            or <code>none</code>, and tells you whether <code>views</code> could have been
+            populated at all.</p>
+          <div class="res" hidden></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec rv" id="ep-handle">
+      <p class="eyebrow"><b>11</b> &mdash; reader <i></i></p>
+      <div class="ep">
+        <div class="hd">
+          <span class="path"><span class="verb">GET</span>/api/handle</span>
+          <button class="btn sm" data-try="/api/handle?h=elonmusk">try it</button>
+        </div>
+        <div class="bd">
+          <p>Resolves an X handle to a display name, follower count and avatar. Used by the check
+            tool on the front page and by the marquee.</p>
+          <table class="tbl" style="margin:6px 0 10px">
+            <thead><tr><th style="width:110px">param</th><th>meaning</th></tr></thead>
+            <tbody>
+              <tr><td class="nowrap"><code>h</code></td><td>a handle, with or without the leading @</td></tr>
+            </tbody>
+          </table>
+          <p>Returns <code>handle</code>, <code>name</code>, <code>followers</code>,
+            <code>verified</code>, <code>avatar</code>, <code>exists</code> and <code>src</code>.
+            A handle that does not exist returns <code>200</code> with
+            <code>exists: false</code> &mdash; not a 404, because "we looked and it is not there" is
+            a successful read.</p>
+          <div class="res" hidden></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec rv" id="ep-avatar">
+      <p class="eyebrow"><b>12</b> &mdash; reader <i></i></p>
+      <div class="ep">
+        <div class="hd">
+          <span class="path"><span class="verb">GET</span>/api/avatar</span>
+          <button class="btn sm" data-try="/api/avatar?h=cobie" data-img="1">try it</button>
+        </div>
+        <div class="bd">
+          <p>Resolves a handle's profile picture and proxies the bytes, so the browser never makes a
+            request to X directly and no referrer leaks. Returns an image, not JSON. Cached at the
+            edge for 24 hours.</p>
+          <table class="tbl" style="margin:6px 0 10px">
+            <thead><tr><th style="width:110px">param</th><th>meaning</th></tr></thead>
+            <tbody>
+              <tr><td class="nowrap"><code>h</code></td><td>a handle, with or without the leading @</td></tr>
+            </tbody>
+          </table>
+          <p><code>400</code> if the handle is missing, <code>404</code> if it cannot be resolved,
+            <code>502</code> if the upstream image cannot be fetched.</p>
+          <div class="res" hidden></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec rv" id="ep-coin">
+      <p class="eyebrow"><b>13</b> &mdash; reader <i></i></p>
+      <div class="ep">
+        <div class="hd">
+          <span class="path"><span class="verb">GET</span>/api/coin</span>
+          <button class="btn sm" data-try="/api/coin?ca=DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263&amp;fee=1">try it</button>
+        </div>
+        <div class="bd">
+          <p>Reads a Solana mint's pair from Dexscreener and runs the pot arithmetic against its
+            real 24-hour volume. Pairs are filtered to <code>chainId: 'solana'</code>, so a
+            same-symbol token on another chain can never be picked up by mistake.</p>
+          <table class="tbl" style="margin:6px 0 10px">
+            <thead><tr><th style="width:110px">param</th><th>meaning</th></tr></thead>
+            <tbody>
+              <tr><td class="nowrap"><code>ca</code></td><td>a base58 Solana mint address, 32&ndash;44 characters. Anything else is a <code>400</code>.</td></tr>
+              <tr><td class="nowrap"><code>fee</code></td><td>creator fee percent. Clamped to 0&ndash;3 to match pump.fun's cap. Defaults to 1.</td></tr>
+            </tbody>
+          </table>
+          <p>Returns <code>price</code>, <code>marketCap</code>, <code>liquidity</code>,
+            <code>volume24</code>, <code>change24</code>, <code>pairUrl</code>,
+            <code>potPerDay</code>, <code>potPerHour</code> and <code>hasPair</code>. Where there is
+            no pair, every figure is <code>null</code> &mdash; never <code>0</code>.</p>
+          <p class="gold" style="font-size:12.5px">The example above reads a different Solana token,
+            because $POT has no mint address yet. It is there to prove the reader works, not to
+            suggest a pair exists.</p>
+          <div class="res" hidden></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec rv" id="errors">
+      <p class="eyebrow"><b>14</b> &mdash; errors <i></i></p>
+      <h2>What a failure <em>looks like</em></h2>
+      <p>The readers do not invent data to avoid an error state, and they do not return zeros to
+        look healthy. There are only three shapes of answer.</p>
+      <div class="box pad0">
+        <table class="tbl">
+          <thead><tr><th style="width:110px">code</th><th>meaning</th></tr></thead>
+          <tbody>
+            <tr><td><b class="grn">200</b></td><td>The read succeeded. This includes "we looked and the thing does not exist" &mdash; those come back with <code>exists: false</code> or <code>hasPair: false</code>, because a successful lookup of a missing thing is not an error.</td></tr>
+            <tr><td><b class="gold">400</b></td><td>The input was not the right shape: a missing handle, a post id that is not numeric, a contract address that is not base58. Nothing upstream was called.</td></tr>
+            <tr><td><b class="red">502</b></td><td>The upstream source could not be reached. The site shows a dash and says so out loud rather than filling the gap.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>The <a class="lnk" href="index.html#status">status section</a> on the front page probes all
+        four readers from your own browser on every page load, so if one of them is down you find
+        out on the page rather than from a silent dash.</p>
+    </section>
+
+    <section class="sec rv" id="live">
+      <p class="eyebrow"><b>15</b> &mdash; what is live <i></i></p>
+      <h2>Working, <em>and not yet</em></h2>
+      <p>Stated at the level of individual pieces, because "coming soon" across a whole site tells
+        you nothing.</p>
+      <div class="box pad0">
+        <table class="tbl">
+          <thead><tr><th style="width:44%">piece</th><th style="width:130px">state</th><th>note</th></tr></thead>
+          <tbody>
+            <tr><td><b>The post reader</b></td><td><span class="pill live">live</span></td><td>Reads any public post's views right now.</td></tr>
+            <tr><td><b>The handle reader</b></td><td><span class="pill live">live</span></td><td>Resolves any public account.</td></tr>
+            <tr><td><b>The pot model</b></td><td><span class="pill live">live</span></td><td>Arithmetic only &mdash; it runs on a volume you type in.</td></tr>
+            <tr><td><b>The coin reader</b></td><td><span class="pill soon">waiting</span></td><td>Works; has no mint to point at yet.</td></tr>
+            <tr><td><b>The hourly feed</b></td><td><span class="pill soon">waiting</span></td><td>Turns on with the mint. Shows dashes until then.</td></tr>
+            <tr><td><b>Payouts</b></td><td><span class="pill no">not started</span></td><td>No hour has been settled. The rundown is empty and honest about it.</td></tr>
+            <tr><td><b>The mint address</b></td><td><span class="pill no">none yet</span></td><td>Does not exist. See below.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="sec rv" id="notchain">
+      <p class="eyebrow"><b>16</b> &mdash; not on chain yet <i></i></p>
+      <h2>What is <em>not</em> verifiable today</h2>
+      <p>This is the part most sites bury. Right now the settlement rules above describe intended
+        behaviour, not observed behaviour, because no hour has ever been settled. There is nothing
+        on chain to check them against.</p>
+      <ul class="list">
+        <li>There is no mint address, so there is no fee income and no pot.</li>
+        <li>No payout has been made, so no receipt exists and the rundown has zero rows.</li>
+        <li>The settlement timings are a specification. Until an hour runs, they are untested in
+          production.</li>
+        <li>The pot figures anywhere on this site are arithmetic on a volume number you chose. They
+          are not a projection and not a promise.</li>
+      </ul>
+      <p>What <b>is</b> checkable today: the readers, which you can call yourself from the buttons
+        above; the arithmetic, which is four lines and shown in full; and this document, which is
+        dated and will carry its own changelog when anything in it moves.</p>
+      <div class="note">
+        <span class="nt">The standard being set</span>
+        <p>Once hours start settling, every one of them is a public post and a rundown row. An hour
+          that is missing from the table is a broken promise you can see from the outside, which is
+          the point of publishing the table at all.</p>
+      </div>
+    </section>
+
+    <section class="sec rv" id="scam">
+      <p class="eyebrow"><b>17</b> &mdash; scams <i></i></p>
+      <h2>Before there is <em>an address</em></h2>
+      <div class="note warn">
+        <span class="nt">Read this one</span>
+        <p><b>$POT has no mint address at the time of writing.</b> When one exists it will be on the
+          front page of this site and in the pinned post, and it will appear in both at the same
+          time. Anyone posting an address before that is scamming you, including if they say they
+          are early, including if the account looks right.</p>
+      </div>
+      <ul class="list">
+        <li>Nobody involved will ever DM you an address, and nobody will ask you to send anything to
+          receive a payout.</li>
+        <li>Winning an hour requires no action from you at all &mdash; so any message asking you to
+          claim, connect, verify or sign is not from this.</li>
+        <li>There is no presale, no allowlist and no private round. There is nothing to be early to.</li>
+        <li>Payouts arrive as dollars in X Money. They do not arrive as a link.</li>
+      </ul>
+    </section>
+
+    <section class="sec rv" id="changelog">
+      <p class="eyebrow"><b>18</b> &mdash; changelog <i></i></p>
+      <h2>Everything that <em>has moved</em></h2>
+      <p>Any change to the settlement rules, the fee, or the eligibility list gets a row here and a
+        post with a date on it. A rule that changes without appearing in this table has not changed
+        legitimately.</p>
+      <div class="box pad0">
+        <table class="tbl">
+          <thead><tr><th style="width:110px">version</th><th style="width:130px">date</th><th>change</th></tr></thead>
+          <tbody>
+            <tr><td><b>0.3</b></td><td class="nowrap">pre-launch</td><td>Docs published: economics, eligibility, settlement order, edge-case table and the four readers written down in full.</td></tr>
+            <tr><td><b>0.2</b></td><td class="nowrap">pre-launch</td><td>Venue set to pump.fun on Solana. Creator fee capped at 3.00%, 100% of it to the pot.</td></tr>
+            <tr><td><b>0.1</b></td><td class="nowrap">pre-launch</td><td>Mechanic fixed: hourly pot, most-viewed post about $POT takes it, paid in dollars through X Money, nothing to claim.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <aside class="toc">
+    <p class="ph">On this page</p>
+    <div id="toc"></div>
+  </aside>
+</div>
+
+<div class="foot">
+  <p>The mechanic is one sentence. This page is the rest of it.</p>
+  <a class="btn solid" href="index.html#check">check a post</a>
+  <a class="btn" href="index.html">back to POT</a>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+
+/* mobile menu */
+$('#mb').addEventListener('click', () => $('#menu').classList.toggle('open'));
+
+/* reveals — the observer handles normal reading; the sweep catches anything a
+   jump (a sidebar click, end key, restored scroll) flew past without it ever
+   intersecting, so nothing is left invisible above the fold. */
+const rvo = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) { e.target.classList.add('vis'); rvo.unobserve(e.target); }
+}), { threshold: .06, rootMargin: '0px 0px -40px 0px' });
+const rvAll = [...document.querySelectorAll('.rv')];
+rvAll.forEach(e => rvo.observe(e));
+const rvSweep = () => rvAll.forEach(el => {
+  if (!el.classList.contains('vis') && el.getBoundingClientRect().top < innerHeight) {
+    el.classList.add('vis'); rvo.unobserve(el);
+  }
+});
+addEventListener('scroll', rvSweep, { passive: true });
+addEventListener('hashchange', rvSweep);
+
+/* build the right-hand rail from the article's own headings */
+const toc = $('#toc');
+const heads = [...document.querySelectorAll('.art .sec')].map(sec => {
+  const h2 = sec.querySelector('h2');
+  const ep = sec.querySelector('.ep .path');
+  return {
+    id: sec.id,
+    label: ep ? ep.textContent.replace('GET', '').trim() : (h2 ? h2.textContent.trim() : sec.id),
+    subs: [...sec.querySelectorAll('h3[id]')].map(h => ({ id: h.id, label: h.textContent.replace(/^#\s*/, '') })),
+  };
+});
+toc.innerHTML = heads.map(h =>
+  `<a href="#${h.id}">${h.label}</a>` +
+  h.subs.map(s => `<a class="sub" href="#${s.id}">${s.label}</a>`).join('')
+).join('');
+
+/* scroll-spy: only over in-page anchors, never the docs/home links */
+const spy = [...document.querySelectorAll('.side a[href^="#"], .toc a[href^="#"]')];
+const targets = new Map();
+spy.forEach(a => {
+  const t = document.querySelector(a.getAttribute('href'));
+  if (!t) return;
+  if (!targets.has(t)) targets.set(t, []);
+  targets.get(t).push(a);
+});
+const seen = new Set();
+const so = new IntersectionObserver(es => {
+  es.forEach(e => e.isIntersecting ? seen.add(e.target) : seen.delete(e.target));
+  if (!seen.size) return;
+  const top = [...seen].sort((a, b) =>
+    a.getBoundingClientRect().top - b.getBoundingClientRect().top)[0];
+  spy.forEach(a => a.classList.remove('on'));
+  (targets.get(top) || []).forEach(a => a.classList.add('on'));
+}, { rootMargin: '-70px 0px -66% 0px' });
+targets.forEach((_, t) => so.observe(t));
+
+/* live "try it" against our own readers */
+const fmt = v => {
+  if (v === null) return '<b style="color:#565b66">null</b>';
+  if (typeof v === 'number') return '<b>' + v.toLocaleString('en-US') + '</b>';
+  if (typeof v === 'boolean') return '<b style="color:' + (v ? '#4ac97e' : '#e5484d') + '">' + v + '</b>';
+  const s = String(v);
+  return '<b>' + (s.length > 190 ? s.slice(0, 190) + '…' : s).replace(/[<>&]/g, c =>
+    ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c])) + '</b>';
+};
+
+document.querySelectorAll('[data-try]').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const url = btn.dataset.try;
+    const out = btn.closest('.ep').querySelector('.res');
+    out.hidden = false;
+    out.innerHTML = 'GET ' + url.replace(/&/g, '&amp;') + '\n\ncalling…';
+    const t0 = performance.now();
+
+    if (btn.dataset.img) {
+      const img = new Image();
+      const done = (ok, extra) => {
+        const ms = Math.round(performance.now() - t0);
+        out.innerHTML = 'GET ' + url + '\n\n'
+          + (ok ? '<b style="color:#4ac97e">200</b> image/*' : '<b style="color:#e5484d">failed</b>')
+          + '  ·  ' + ms + 'ms' + (extra || '');
+      };
+      img.onload = () => {
+        done(true, '  ·  ' + img.naturalWidth + '×' + img.naturalHeight + 'px');
+        const el = document.createElement('img');
+        el.src = img.src; el.width = 56; el.height = 56;
+        el.style.cssText = 'border-radius:50%;margin-top:12px;display:block';
+        out.appendChild(el);
+      };
+      img.onerror = () => done(false);
+      img.referrerPolicy = 'no-referrer';
+      img.src = url + '&t=' + Date.now();
+      return;
+    }
+
+    try {
+      const r = await fetch(url);
+      const j = await r.json();
+      const ms = Math.round(performance.now() - t0);
+      const code = r.ok ? '<b style="color:#4ac97e">' + r.status + '</b>'
+                        : '<b style="color:#e5484d">' + r.status + '</b>';
+      out.innerHTML = 'GET ' + url.replace(/&/g, '&amp;') + '\n\n'
+        + code + '  ·  ' + ms + 'ms\n\n'
+        + Object.entries(j).map(([k, v]) => '  ' + k.padEnd(12) + fmt(v)).join('\n');
+    } catch (e) {
+      out.innerHTML = 'GET ' + url.replace(/&/g, '&amp;')
+        + '\n\n<b style="color:#e5484d">unreachable</b>  ·  '
+        + Math.round(performance.now() - t0) + 'ms\n\n'
+        + '  The reader could not be called from this page. If you are viewing this\n'
+        + '  file locally rather than on the deployed site, that is expected.';
+    }
+  });
+});
+</script>
+</body>
+</html>
