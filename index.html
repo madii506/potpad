@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="en" class="loading">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>POT</title>
-<meta name="description" content="An hourly pot on Robinhood Chain. The most-viewed post about $POT each hour takes it, paid in dollars through X Money. Nothing to claim.">
+<meta name="description" content="An hourly pot on pump.fun. The most-viewed post about $POT each hour takes it, paid in dollars through X Money. Nothing to claim.">
 <link rel="icon" href="assets/favicon-32.png" sizes="32x32">
 <link rel="icon" href="assets/favicon-64.png" sizes="64x64">
 <link rel="apple-touch-icon" href="assets/favicon-180.png">
@@ -13,232 +13,158 @@
 <meta property="og:image" content="assets/pfp.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#030305; --panel:#0e0f13; --panel2:#121318;
-  --gold:#f0b23a; --gold-d:#8d6415; --green:#4ac97e; --green-d:#123122;
-  --white:#f3f1ec; --grey:#868a96; --dim:#5a5e69;
-  --line:rgba(240,178,58,.14); --hair:rgba(255,255,255,.07);
-  --serif:"Playfair Display",Georgia,"Times New Roman",serif;
-  --ui:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
-  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --bg:#030305; --panel:#08090c; --hair:rgba(255,255,255,.10);
+  --white:#f2f3f5; --grey:#8b909c; --dim:#565b66;
+  --gold:#f0b23a; --green:#4ac97e; --red:#e5484d;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
 }
 *{box-sizing:border-box}
 html{overflow-x:hidden;scroll-behavior:smooth}
-body{overflow-x:clip;margin:0;background:var(--bg);color:var(--white);font-family:var(--ui);
-  font-size:16px;line-height:1.62;-webkit-font-smoothing:antialiased}
-html.loading{overflow:hidden}
+body{overflow-x:clip;margin:0;background:var(--bg);color:var(--white);
+  font-family:var(--mono);font-size:14.5px;line-height:1.7;-webkit-font-smoothing:antialiased}
 [hidden]{display:none!important}
 a{color:inherit}
-section[id]{scroll-margin-top:26px}
-img{max-width:100%}
+section[id]{scroll-margin-top:24px}
+pre{margin:0;font-family:var(--mono)}
 
-/* ---------- loader: 5s, no text, always has a backstop ---------------- */
-html:not(.js) .load{display:none}
-.load{position:fixed;inset:0;z-index:99;background:#000;display:grid;place-items:center;
-  transition:opacity .5s ease,visibility .5s}
-.load.done{opacity:0;visibility:hidden}
-.load .stage{position:relative;width:260px;height:260px;display:grid;place-items:center}
-.load .mk{width:104px;height:104px;animation:pulse 1.8s ease-in-out infinite}
-@keyframes pulse{0%,100%{opacity:.62;transform:scale(.97)}50%{opacity:1;transform:scale(1.03)}}
-.load .orb{position:absolute;inset:0}
-.load .orb i{position:absolute;top:50%;left:50%;width:5px;height:5px;margin:-2.5px;border-radius:50%;
-  background:var(--gold);opacity:.5;
-  transform:rotate(calc(var(--i)*30deg)) translateY(-118px) rotate(calc(var(--i)*-30deg));
-  animation:chase 2.4s linear infinite;animation-delay:calc(var(--i)*-.2s)}
-@keyframes chase{0%,78%{opacity:.14}86%{opacity:1}100%{opacity:.14}}
-.load .bar{position:absolute;bottom:-34px;left:50%;transform:translateX(-50%);
-  width:190px;height:7px;border:1px solid rgba(240,178,58,.5);border-radius:1px}
-.load .bar u{position:absolute;left:1px;top:1px;bottom:1px;width:0;background:var(--gold);display:block}
+/* ---------- top strip: warning, not decoration ------------------------ */
+.strip{border-bottom:1px solid var(--hair);font-size:11.5px;letter-spacing:.05em;
+  color:var(--grey);text-align:center;padding:9px 16px;background:#050507}
+.strip b{color:var(--white);font-weight:600}
 
-/* ---------- permanent anti-scam strip --------------------------------- */
-.strip{background:#0a0709;border-bottom:1px solid var(--line);font-family:var(--mono);
-  font-size:11.5px;letter-spacing:.06em;color:#d9a53e;text-align:center;padding:9px 16px}
-.strip b{color:var(--gold);font-weight:700}
-.strip .addr{color:var(--white)}
-
-/* ---------- nav: truly centred needs 1fr auto 1fr --------------------- */
+/* ---------- nav: bracketed, centred (1fr auto 1fr) -------------------- */
 nav{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;
-  padding:16px 20px;border-bottom:1px solid var(--hair);position:sticky;top:0;z-index:40;
-  background:rgba(3,3,5,.86);backdrop-filter:blur(10px)}
+  padding:14px 20px;border-bottom:1px solid var(--hair);position:sticky;top:0;z-index:40;
+  background:rgba(3,3,5,.9);backdrop-filter:blur(8px)}
 nav .sp{min-width:0}
-nav .links{display:flex;justify-content:center;gap:26px;flex-wrap:wrap}
-nav a{font-size:13px;letter-spacing:.05em;text-transform:lowercase;color:var(--grey);
-  text-decoration:none;padding:4px 0;border-bottom:1.5px solid transparent;transition:.2s}
+nav .links{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
+nav a{font-size:12.5px;color:var(--dim);text-decoration:none;padding:3px 2px;transition:.15s}
+nav a::before{content:"[";color:var(--dim);margin-right:3px}
+nav a::after{content:"]";color:var(--dim);margin-left:3px}
 nav a:hover{color:var(--white)}
-nav a.on{color:var(--gold);border-bottom-color:var(--gold)}
+nav a.on{color:var(--gold)}
+nav a.on::before,nav a.on::after{color:var(--gold)}
 #mb{display:none;background:none;border:1px solid var(--hair);color:var(--white);
-  border-radius:8px;padding:7px 12px;font-size:13px;cursor:pointer}
+  padding:6px 10px;font-size:12px;cursor:pointer;font-family:var(--mono)}
 
-/* ---------- bands ------------------------------------------------------ */
-.band{padding:74px 20px;border-bottom:1px solid var(--hair);position:relative;overflow:hidden}
-.band.tint{background:rgba(255,255,255,.017)}
-.band::before{content:"";position:absolute;inset:-40px;pointer-events:none;
-  background-image:radial-gradient(rgba(240,178,58,.075) 1.3px,transparent 1.4px);
-  background-size:26px 26px;animation:drift 30s linear infinite;opacity:.55}
-@keyframes drift{to{transform:translate(26px,26px)}}
-.wrap{max-width:1060px;margin:0 auto;position:relative}
-.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.17em;color:var(--dim);
-  text-transform:uppercase;margin:0 0 18px}
-.eyebrow b{color:var(--gold);font-weight:600}
-h2{font-family:var(--serif);font-weight:500;font-size:clamp(28px,4vw,42px);line-height:1.16;
-  margin:0 0 10px;letter-spacing:-.01em}
-h2 em{font-style:italic;color:var(--gold)}
-.lede{color:var(--grey);max-width:62ch;margin:0 0 30px}
-
-/* ---------- hero ------------------------------------------------------- */
-.hero{padding:86px 20px 64px;text-align:center;border-bottom:1px solid var(--hair);position:relative;overflow:hidden}
-.hero::before{content:"";position:absolute;inset:-40px;pointer-events:none;
-  background-image:radial-gradient(rgba(240,178,58,.08) 1.3px,transparent 1.4px);
-  background-size:26px 26px;animation:drift 30s linear infinite;opacity:.6}
-.hero .mark{width:96px;height:96px;margin:0 auto 22px;display:block}
-.hero h1{font-family:var(--ui);font-weight:800;font-size:clamp(34px,6vw,54px);letter-spacing:.14em;
-  margin:0 0 18px}
-.hero .line{font-family:var(--serif);font-weight:500;font-size:clamp(24px,3.7vw,40px);
-  line-height:1.2;margin:0 auto 12px;max-width:16ch}
-.hero .line em{font-style:italic;color:var(--gold)}
-.hero .sub{color:var(--grey);max-width:54ch;margin:0 auto 30px}
-.rule{width:96px;height:3px;background:var(--gold);margin:0 auto 26px;border-radius:2px}
-.btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:999px;
-  font-size:14px;font-weight:600;text-decoration:none;cursor:pointer;border:1px solid var(--line);
-  background:transparent;color:var(--white);font-family:var(--ui);transition:.18s}
+/* ---------- hero: ascii wordmark, flickering white -------------------- */
+.hero{padding:60px 20px 46px;text-align:center;border-bottom:1px solid var(--hair)}
+.ascii{display:inline-block;font-size:clamp(8px,1.9vw,18px);line-height:1.04;
+  letter-spacing:.06em;white-space:pre;color:#fff;animation:flick 4.4s steps(1) infinite;
+  text-shadow:0 0 12px rgba(255,255,255,.28)}
+@keyframes flick{
+  0%,10%,12%,28%,30%,58%,60%,61%,84%,100%{opacity:1}
+  11%{opacity:.34} 29%{opacity:.62} 59%{opacity:.22} 60.5%{opacity:.78} 85%{opacity:.46}
+}
+.hero .tag{margin:26px 0 6px;font-size:clamp(15px,2.1vw,19px);letter-spacing:.02em}
+.hero .tag em{font-style:normal;color:var(--gold)}
+.hero .sub{color:var(--grey);max-width:66ch;margin:0 auto 26px;font-size:13.5px}
+.btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-block;padding:9px 16px;font-size:13px;font-family:var(--mono);
+  text-decoration:none;cursor:pointer;border:1px solid var(--hair);background:transparent;
+  color:var(--white);transition:.15s}
 .btn:hover{border-color:var(--gold);color:var(--gold)}
-.btn.solid{background:var(--gold);color:#120c02;border-color:var(--gold)}
-.btn.solid:hover{background:#ffc862;color:#120c02}
-.btn[disabled]{opacity:.42;cursor:not-allowed}
+.btn.solid{background:var(--gold);color:#120c02;border-color:var(--gold);font-weight:600}
+.btn.solid:hover{background:#ffc862}
+.btn[disabled]{opacity:.4;cursor:not-allowed}
 
-/* ---------- 6-cell stat rail ------------------------------------------ */
-.rail{display:grid;grid-template-columns:repeat(6,1fr);border-top:1px solid var(--hair);
-  border-bottom:1px solid var(--hair)}
-.rail div{padding:20px 16px;border-right:1px solid var(--hair)}
+/* ---------- stat rail -------------------------------------------------- */
+.rail{display:grid;grid-template-columns:repeat(5,1fr);border-bottom:1px solid var(--hair)}
+.rail div{padding:16px 14px;border-right:1px solid var(--hair)}
 .rail div:last-child{border-right:0}
-.rail span{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;
-  color:var(--dim);text-transform:uppercase;margin-bottom:7px}
-.rail b{font-size:19px;font-weight:700;letter-spacing:-.01em}
-.rail b.g{color:var(--gold)}
-.rail b.ok{color:var(--green)}
+.rail span{display:block;font-size:10px;letter-spacing:.14em;color:var(--dim);
+  text-transform:uppercase;margin-bottom:5px}
+.rail b{font-size:17px;font-weight:600}
+.rail b.g{color:var(--gold)} .rail b.ok{color:var(--green)}
 
 /* ---------- marquee ---------------------------------------------------- */
 .mq{width:100vw;margin-left:calc(50% - 50vw);overflow:hidden;border-bottom:1px solid var(--hair);
-  padding:13px 0;background:rgba(255,255,255,.015)}
-.mq .row{display:flex;width:max-content;animation:slide 46s linear infinite}
+  padding:10px 0}
+.mq .row{display:flex;width:max-content;animation:slide 48s linear infinite}
 .mq:hover .row{animation-play-state:paused}
 @keyframes slide{to{transform:translateX(-50%)}}
-.mq .chip{display:inline-flex;align-items:center;gap:8px;margin-right:30px;
-  font-family:var(--mono);font-size:12.5px;color:var(--grey);white-space:nowrap}
-.mq .chip img{width:22px;height:22px;border-radius:50%;opacity:0;transition:opacity .4s;
-  background:#16171c;object-fit:cover}
+.mq .chip{display:inline-flex;align-items:center;gap:7px;margin-right:26px;
+  font-size:12px;color:var(--dim);white-space:nowrap}
+.mq .chip img{width:20px;height:20px;border-radius:50%;opacity:0;transition:opacity .4s;
+  background:#111;object-fit:cover}
 .mq .chip img.ok{opacity:1}
 
-/* ---------- numbered items on hairlines -------------------------------- */
-.items{border-top:1px solid var(--hair)}
-.items .it{display:grid;grid-template-columns:52px 1fr;gap:18px;padding:22px 0;
+/* ---------- bands ------------------------------------------------------ */
+.band{padding:58px 20px;border-bottom:1px solid var(--hair)}
+.wrap{max-width:900px;margin:0 auto}
+.eyebrow{color:var(--dim);font-size:12px;letter-spacing:.1em;margin:0 0 16px;
+  overflow:hidden;white-space:nowrap}
+.eyebrow b{color:var(--gold);font-weight:600}
+h2{font-size:clamp(19px,2.7vw,25px);font-weight:600;margin:0 0 10px;letter-spacing:-.01em}
+h2 em{font-style:normal;color:var(--gold)}
+.lede{color:var(--grey);max-width:74ch;margin:0 0 26px;font-size:13.5px}
+
+/* ---------- ascii boxes ------------------------------------------------ */
+.box{border:1px solid var(--hair);background:var(--panel);padding:18px}
+.box .bt{color:var(--dim);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;
+  margin:0 0 14px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.rows{border-top:1px solid var(--hair)}
+.rows .r{display:grid;grid-template-columns:44px 1fr;gap:14px;padding:16px 0;
   border-bottom:1px solid var(--hair);align-items:start}
-.items .n{font-family:var(--mono);font-size:12px;color:var(--gold);letter-spacing:.1em;padding-top:4px}
-.items h3{margin:0 0 5px;font-size:17px;font-weight:600}
-.items p{margin:0;color:var(--grey);font-size:15px}
+.rows .n{color:var(--gold);font-size:12px}
+.rows h3{margin:0 0 4px;font-size:14.5px;font-weight:600}
+.rows p{margin:0;color:var(--grey);font-size:13px}
 
-/* ---------- live card -------------------------------------------------- */
-.live{border:1px solid var(--line);border-radius:16px;background:var(--panel);padding:22px;
-  display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;min-height:104px;
-  transition:opacity .42s}
-.live.fade{opacity:0}
-.live img{width:54px;height:54px;border-radius:50%;background:#16171c;object-fit:cover}
-.live .h{font-weight:700;font-size:16px}
-.live .s{color:var(--grey);font-size:13.5px;font-family:var(--mono)}
-.live .amt{font-size:22px;font-weight:700;text-align:right}
-.live .chip{display:inline-block;margin-top:5px;padding:3px 10px;border-radius:999px;
-  font-size:11px;font-weight:700;font-family:var(--mono);letter-spacing:.07em}
-.chip.won{background:#3a2a08;color:var(--gold)}
-.chip.sent{background:var(--green-d);color:var(--green)}
-.dots{display:flex;gap:6px;justify-content:center;margin-top:16px}
-.dots i{width:6px;height:6px;border-radius:50%;background:var(--hair);cursor:pointer;transition:.2s}
-.dots i.on{background:var(--gold);width:18px;border-radius:3px}
-
-/* ---------- forms / tools --------------------------------------------- */
-.tool{border:1px solid var(--line);border-radius:16px;background:var(--panel);padding:22px}
-label{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--dim);
-  text-transform:uppercase;margin:0 0 7px}
-input[type=text],input[type=number]{width:100%;padding:12px 14px;border-radius:10px;
-  border:1px solid var(--hair);background:#08090c;color:var(--white);font-family:var(--mono);
-  font-size:14px}
+/* ---------- forms / output -------------------------------------------- */
+label{display:block;font-size:10.5px;letter-spacing:.13em;color:var(--dim);
+  text-transform:uppercase;margin:0 0 6px}
+input[type=text],input[type=number]{width:100%;padding:10px 12px;border:1px solid var(--hair);
+  background:#050608;color:var(--white);font-family:var(--mono);font-size:13.5px}
 input:focus{outline:none;border-color:var(--gold)}
-.field{margin-bottom:16px}
-.out{margin-top:16px;border-top:1px solid var(--hair);padding-top:16px;font-family:var(--mono);
-  font-size:13.5px;color:var(--grey);white-space:pre-wrap;word-break:break-word}
-.out b{color:var(--white)}
-.out .g{color:var(--gold)}
-.kv{display:grid;grid-template-columns:1fr auto;gap:10px;padding:9px 0;border-bottom:1px solid var(--hair);
-  font-family:var(--mono);font-size:13px}
-.kv:last-child{border-bottom:0}
+.field{margin-bottom:14px}
+.two{display:grid;grid-template-columns:1fr 200px;gap:14px}
+.out{margin-top:14px;border-top:1px solid var(--hair);padding-top:14px;font-size:13px;
+  color:var(--grey);white-space:pre-wrap;word-break:break-word}
+.out b{color:var(--white)} .out .g{color:var(--gold)}
+.kv{display:grid;grid-template-columns:1fr auto;gap:10px;padding:7px 0;
+  border-bottom:1px solid var(--hair);font-size:13px}
+.kv:last-of-type{border-bottom:0}
 .kv span{color:var(--dim)}
-.kv b{font-weight:700}
-.split{display:flex;height:11px;border-radius:999px;overflow:hidden;margin:14px 0 10px;background:#16171c}
-.split i{display:block;height:100%}
+.bar{font-size:12px;color:var(--gold);letter-spacing:-.04em;margin:12px 0 6px;white-space:nowrap;overflow:hidden}
 
-/* ---------- empty states (offline honestly, with a retry) --------------- */
-.empty{border:1px dashed var(--hair);border-radius:16px;padding:44px 22px;text-align:center;
-  color:var(--grey)}
-.empty h4{margin:0 0 6px;color:var(--white);font-size:16px;font-weight:600}
-.empty p{margin:0 0 16px;font-size:14px}
-.status{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;
-  letter-spacing:.1em;color:var(--dim);text-transform:uppercase}
-.status i{width:7px;height:7px;border-radius:50%;background:var(--dim);display:block}
+/* ---------- empty states ----------------------------------------------- */
+.empty{border:1px dashed var(--hair);padding:38px 20px;text-align:center;color:var(--grey)}
+.empty h4{margin:0 0 6px;color:var(--white);font-size:14.5px;font-weight:600}
+.empty p{margin:0 0 14px;font-size:13px}
+.status{display:inline-flex;align-items:center;gap:6px;font-size:10.5px;letter-spacing:.11em;
+  color:var(--dim);text-transform:uppercase}
+.status i{width:6px;height:6px;border-radius:50%;background:var(--dim);display:block}
 .status.live i{background:var(--green)}
-.head{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+.head{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:14px}
 
-/* ---------- faq -------------------------------------------------------- */
-details{border-bottom:1px solid var(--hair);padding:16px 0}
-summary{cursor:pointer;font-weight:600;font-size:16px;list-style:none}
+details{border-bottom:1px solid var(--hair);padding:13px 0}
+summary{cursor:pointer;font-weight:600;font-size:14px;list-style:none}
 summary::-webkit-details-marker{display:none}
-summary::after{content:"+";float:right;color:var(--gold);font-family:var(--mono)}
-details[open] summary::after{content:"\2212"}
-details p{color:var(--grey);margin:11px 0 0;font-size:15px}
+summary::before{content:"+ ";color:var(--gold)}
+details[open] summary::before{content:"- ";color:var(--gold)}
+details p{color:var(--grey);margin:9px 0 0 16px;font-size:13px}
 
-footer{padding:26px 20px;text-align:center;color:var(--dim);font-family:var(--mono);font-size:11.5px;
-  letter-spacing:.07em}
-
-/* ---------- reveal (never name this class .in) ------------------------- */
-.rv{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
+.rv{opacity:0;transform:translateY(12px);transition:opacity .5s ease,transform .5s ease}
 .rv.vis{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){
   .rv{opacity:1;transform:none;transition:none}
-  .mq .row,.band::before,.hero::before,.load .mk,.load .orb i{animation:none}
+  .mq .row,.ascii{animation:none}
 }
-
-@media(max-width:860px){
-  .rail{grid-template-columns:repeat(2,1fr)}
-  .rail div{border-bottom:1px solid var(--hair)}
-}
+@media(max-width:860px){ .rail{grid-template-columns:repeat(2,1fr)} .rail div{border-bottom:1px solid var(--hair)} .two{grid-template-columns:1fr} }
 @media(max-width:700px){
   nav{grid-template-columns:1fr auto}
   nav .sp:first-child{display:none}
-  nav .links{display:none;grid-column:1/-1;flex-direction:column;align-items:center;gap:14px;padding-top:12px}
+  nav .links{display:none;grid-column:1/-1;flex-direction:column;align-items:center;gap:10px;padding-top:10px}
   nav .links.open{display:flex}
   #mb{display:block}
-  .band{padding:54px 16px}
-  .hero{padding:60px 16px 48px}
-  .live{grid-template-columns:auto 1fr;gap:12px}
-  .live .amt{grid-column:1/-1;text-align:left}
+  .band{padding:44px 16px} .hero{padding:44px 16px 36px}
 }
 </style>
 </head>
 <body>
-
-<!-- loader -->
-<div class="load" id="load" aria-hidden="true">
-  <div class="stage">
-    <div class="orb">
-      <i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i>
-      <i style="--i:4"></i><i style="--i:5"></i><i style="--i:6"></i><i style="--i:7"></i>
-      <i style="--i:8"></i><i style="--i:9"></i><i style="--i:10"></i><i style="--i:11"></i>
-    </div>
-    <img class="mk" src="assets/logo.png" alt="">
-    <div class="bar"><u id="lbar"></u></div>
-  </div>
-</div>
 
 <div class="strip" id="strip"></div>
 
@@ -256,54 +182,51 @@ footer{padding:26px 20px;text-align:center;color:var(--dim);font-family:var(--mo
 </nav>
 
 <header class="hero">
-  <div class="wrap">
-    <img class="mark" src="assets/logo.png" alt="POT">
-    <h1>POT</h1>
-    <p class="line">Every hour, someone <em>gets paid.</em></p>
-    <div class="rule"></div>
-    <p class="sub">The creator fee fills a pot. At the top of every hour the whole thing goes to
-      the X handle whose post about $POT got the most views — paid in dollars through X Money.
-      No wallet. No code. Nothing to claim.</p>
-    <div class="btns">
-      <a class="btn solid" href="#check">Check a post</a>
-      <a class="btn" href="#rule">How it works</a>
-      <a class="btn" id="b-launch" href="https://ponsvault.com/launch" target="_blank" rel="noopener">Pons launchpad</a>
-    </div>
+  <pre class="ascii" aria-label="POT">██████   █████  ████████
+██   ██ ██   ██    ██
+██████  ██   ██    ██
+██      ██   ██    ██
+██       █████     ██</pre>
+  <p class="tag">Every hour, someone <em>gets paid.</em></p>
+  <p class="sub">The creator fee fills a pot. At the top of every hour the whole thing goes to the
+    X handle whose post about $POT got the most views &mdash; paid in dollars through X Money.
+    No wallet. No code. Nothing to claim.</p>
+  <div class="btns">
+    <a class="btn solid" href="#check">check a post</a>
+    <a class="btn" href="#rule">how it works</a>
   </div>
 </header>
 
 <div class="rail">
-  <div><span>Pot this hour</span><b class="g" id="s-pot">—</b></div>
-  <div><span>Next payout</span><b id="s-next">—</b></div>
-  <div><span>Hours paid</span><b id="s-hours">—</b></div>
-  <div><span>Paid out total</span><b id="s-total">—</b></div>
-  <div><span>Network</span><b>Robinhood Chain</b></div>
+  <div><span>Pot this hour</span><b class="g" id="s-pot">&mdash;</b></div>
+  <div><span>Next payout</span><b id="s-next">&mdash;</b></div>
+  <div><span>Hours paid</span><b id="s-hours">&mdash;</b></div>
+  <div><span>Paid out total</span><b id="s-total">&mdash;</b></div>
   <div><span>Claims required</span><b class="ok">0</b></div>
 </div>
 
 <div class="mq"><div class="row" id="mq"></div></div>
 
-<!-- 01 -->
 <section class="band" id="rule">
   <div class="wrap rv">
-    <p class="eyebrow"><b>01</b> — the rule</p>
+    <p class="eyebrow"><b>01</b> &mdash; the rule &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;</p>
     <h2>One pot. One winner. <em>Every hour.</em></h2>
-    <p class="lede">There is no application, no allowlist and no discretion. The hour decides,
-      the chain pays, and the receipt is public.</p>
-    <div class="items">
-      <div class="it"><div class="n">I</div><div>
+    <p class="lede">No application, no allowlist, no discretion. The hour decides, the chain pays,
+      the receipt is public.</p>
+    <div class="rows">
+      <div class="r"><div class="n">01</div><div>
         <h3>Post about $POT</h3>
         <p>Anything. A thread, a chart, a joke. It only has to mention the coin and be public.</p></div></div>
-      <div class="it"><div class="n">II</div><div>
+      <div class="r"><div class="n">02</div><div>
         <h3>The most-viewed post in the hour takes the pot</h3>
-        <p>Views are read live from X at the top of each hour. Not likes, not followers — views,
-          which is the only number that measures how far it actually travelled.</p></div></div>
-      <div class="it"><div class="n">III</div><div>
+        <p>Views are read live from X at the top of each hour. Not likes, not followers &mdash; views,
+          the only number that measures how far it actually travelled.</p></div></div>
+      <div class="r"><div class="n">03</div><div>
         <h3>The dollars land before you know you won</h3>
-        <p>X Money sends dollars to any handle for free. There is no wallet to connect, no code to
-          paste in your bio and no window before it burns. Every other pad on this chain says
-          <em>only you can claim</em>. This one has nothing to claim.</p></div></div>
-      <div class="it"><div class="n">IV</div><div>
+        <p>X Money sends dollars to any handle for free. No wallet to connect, no code to paste in
+          your bio, no window before it burns. Every other pad says <em>only you can claim</em>.
+          This one has nothing to claim.</p></div></div>
+      <div class="r"><div class="n">04</div><div>
         <h3>The payout posts itself</h3>
         <p>Each win goes out as a public post naming the handle, the post, the views and the amount,
           linked to a receipt. Nobody can claim an hour that never happened.</p></div></div>
@@ -311,283 +234,237 @@ footer{padding:26px 20px;text-align:center;color:var(--dim);font-family:var(--mo
   </div>
 </section>
 
-<!-- 02 -->
-<section class="band tint" id="hour">
+<section class="band" id="hour">
   <div class="wrap rv">
-    <p class="eyebrow"><b>02</b> — this hour</p>
+    <p class="eyebrow"><b>02</b> &mdash; this hour &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;</p>
     <div class="head">
       <h2 style="margin:0">Who is <em>winning</em> right now</h2>
-      <span class="status" id="feed-status"><i></i><span>Feed offline</span></span>
+      <span class="status" id="feed-status"><i></i><span>feed offline</span></span>
     </div>
-    <div id="hour-body">
-      <div class="empty" id="hour-empty">
-        <h4>Connecting to the hour…</h4>
-        <p>Posts and view counts appear here once the coin exists and the registry is connected.
-          Until then there is nothing to show and nothing to invent.</p>
-        <button class="btn" id="b-retry">Retry connection ↻</button>
-      </div>
-    </div>
-    <div id="demo-wrap" hidden>
-      <div class="live" id="live">
-        <img id="lv-av" alt="" referrerpolicy="no-referrer">
-        <div><div class="h" id="lv-h">—</div><div class="s" id="lv-s">—</div>
-          <span class="chip won" id="lv-chip">WON</span></div>
-        <div class="amt" id="lv-amt">—</div>
-      </div>
-      <div class="dots" id="dots"></div>
+    <div class="empty" id="hour-empty">
+      <h4>No coin yet, so no hour yet.</h4>
+      <p>Posts and view counts appear the moment there is a mint address.
+        Nothing here is simulated.</p>
+      <button class="btn" id="b-retry">retry connection</button>
     </div>
   </div>
 </section>
 
-<!-- 03 -->
 <section class="band" id="check">
   <div class="wrap rv">
-    <p class="eyebrow"><b>03</b> — check a post</p>
+    <p class="eyebrow"><b>03</b> &mdash; check a post &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;</p>
     <h2>Paste any post. <em>See what it did.</em></h2>
-    <p class="lede">This reads the live view count straight from X, the same way the hour is settled.
-      It works on any public post, not only ones about $POT — try your own.</p>
-    <div class="tool">
+    <p class="lede">Reads the live view count straight from X, the same way the hour is settled.
+      Works on any public post, not only ones about $POT &mdash; try your own.</p>
+    <div class="box">
+      <div class="bt"><span>GET /api/tweet</span><span id="ck-src">idle</span></div>
       <div class="field">
-        <label for="f-url">X post url or id</label>
+        <label for="f-url">x post url or id</label>
         <input type="text" id="f-url" placeholder="https://x.com/someone/status/1234567890123456789" spellcheck="false">
       </div>
       <div class="btns" style="justify-content:flex-start">
-        <button class="btn solid" id="b-check">Read it</button>
-        <button class="btn" id="b-clear">Clear</button>
+        <button class="btn solid" id="b-check">read it</button>
+        <button class="btn" id="b-clear">clear</button>
       </div>
       <div class="out" id="o-check" hidden></div>
     </div>
   </div>
 </section>
 
-<!-- 04 -->
-<section class="band tint" id="model">
+<section class="band" id="model">
   <div class="wrap rv">
-    <p class="eyebrow"><b>04</b> — the model</p>
+    <p class="eyebrow"><b>04</b> &mdash; the model &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;</p>
     <h2>All of the creator fee. <em>None of it kept.</em></h2>
-    <p class="lede">Pons charges 1.00% on every trade and splits it 70 / 30 with the creator, so
-      0.70% of volume is the only part any pad controls. Here, all of it is the prize.</p>
-    <div class="tool">
-      <div class="field">
-        <label for="f-vol">24h volume (usd)</label>
-        <input type="number" id="f-vol" value="1000000" min="0" step="1000">
+    <p class="lede">pump.fun lets the creator set a per-trade fee at launch, capped at 3.00%.
+      Whatever it is set to, all of it is the prize. Change either number and the arithmetic
+      below changes with it.</p>
+    <div class="box">
+      <div class="bt"><span>POT = VOLUME &times; FEE &divide; 24</span><span>pump.fun &middot; solana</span></div>
+      <div class="two">
+        <div class="field">
+          <label for="f-vol">24h volume (usd)</label>
+          <input type="number" id="f-vol" value="1000000" min="0" step="1000">
+        </div>
+        <div class="field">
+          <label for="f-fee">creator fee (%)</label>
+          <input type="number" id="f-fee" value="1" min="0" max="3" step="0.05">
+        </div>
       </div>
-      <div class="split">
-        <i style="width:100%;background:var(--gold)"></i>
-      </div>
-      <div class="kv"><span>Pons trade fee</span><b>1.00%</b></div>
-      <div class="kv"><span>Creator share (70%)</span><b>0.70% of volume</b></div>
-      <div class="kv"><span>Into the pot</span><b class="g" style="color:var(--gold)">100% of the creator share</b></div>
-      <div class="kv"><span>Pot per day</span><b id="m-day">—</b></div>
-      <div class="kv"><span>Pot per hour</span><b id="m-hour">—</b></div>
-      <div class="kv"><span>Kept by the pad</span><b>$0.00</b></div>
+      <div class="bar" id="m-bar"></div>
+      <div class="kv"><span>into the pot</span><b class="g" style="color:var(--gold)">100% of the creator fee</b></div>
+      <div class="kv"><span>pot per day</span><b id="m-day">&mdash;</b></div>
+      <div class="kv"><span>pot per hour</span><b id="m-hour">&mdash;</b></div>
+      <div class="kv"><span>kept by the pad</span><b>$0.00</b></div>
       <div class="out" id="o-model"></div>
     </div>
   </div>
 </section>
 
-<!-- 05 -->
 <section class="band" id="rundown">
   <div class="wrap rv">
-    <p class="eyebrow"><b>05</b> — the rundown</p>
+    <p class="eyebrow"><b>05</b> &mdash; the rundown &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;</p>
     <div class="head">
       <h2 style="margin:0">Every hour, <em>on the record</em></h2>
       <span class="status" id="run-count">0 hours</span>
     </div>
     <p class="lede">Each row is an hour: who won it, what they posted, how far it travelled, what it
-      paid and the receipt. It only ever grows.</p>
+      paid, and the receipt. It only ever grows.</p>
     <div class="empty">
       <h4>No hours have been paid yet.</h4>
-      <p>The first row appears the first time the clock strikes and a post exists. Nothing is
-        back-filled and nothing is estimated.</p>
+      <p>The first row appears the first time the clock strikes and a post exists.
+        Nothing is back-filled and nothing is estimated.</p>
     </div>
   </div>
 </section>
 
-<!-- 06 -->
-<section class="band tint" id="faq">
+<section class="band" id="faq" style="border-bottom:0">
   <div class="wrap rv">
-    <p class="eyebrow"><b>06</b> — faq</p>
+    <p class="eyebrow"><b>06</b> &mdash; faq &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;</p>
     <h2>The awkward questions, <em>first.</em></h2>
-    <div style="margin-top:22px">
-      <details open><summary>Why does everything on this page show a dash?</summary>
-        <p>Because the coin does not exist yet. A dash is the honest number — a zero would imply we
-          looked and found nothing, and we have not looked at all. Every figure here fills in by
-          itself once there is a contract address and a pair.</p></details>
+    <div style="margin-top:18px">
+      <details open><summary>Why is everything on this page a dash?</summary>
+        <p>Because the coin does not exist yet. A dash is the honest number &mdash; a zero would imply
+          we looked and found nothing, and we have not looked at all. Every figure fills in by itself
+          once there is a mint address and a pair.</p></details>
       <details><summary>Do I need a wallet to get paid?</summary>
         <p>No. X Money sends dollars to any X handle for free, so the money arrives in your X Money
-          balance. You do not connect anything, you do not paste a code anywhere, and there is no
-          deadline after which it disappears.</p></details>
+          balance. Nothing to connect, no code to paste, no deadline after which it disappears.</p></details>
       <details><summary>What stops one account winning every hour?</summary>
-        <p>X Money is rate-limited to one payment per person per day. That is not our rule, it is
-          the rail's — and it is exactly why there is one winner per hour rather than a spray.
-          An account that has already been paid today is skipped and the pot goes to the next post.</p></details>
+        <p>X Money is rate-limited to one payment per person per day. That is the rail's rule, not
+          ours &mdash; and it is exactly why there is one winner per hour rather than a spray. An
+          account already paid today is skipped and the pot goes to the next post.</p></details>
       <details><summary>What counts as a post about $POT?</summary>
         <p>A public post that names the coin. Replies count, quotes count, threads count as their
           first post. Private and deleted posts cannot be read, so they cannot win.</p></details>
-      <details><summary>Where does the money actually come from?</summary>
-        <p>Trading fees, and nowhere else. There is no treasury, no allocation and no outside
-          funding. If nobody trades, the pot is empty and the page will say so.</p></details>
-      <details><summary>Can I see the payouts without trusting you?</summary>
+      <details><summary>Where does the money come from?</summary>
+        <p>Trading fees, and nowhere else. No treasury, no allocation, no outside funding. If nobody
+          trades, the pot is empty and this page will say so.</p></details>
+      <details><summary>Can I check the payouts without trusting you?</summary>
         <p>Yes. Each payout is a public post and a receipt, and the fee income is derived from
-          on-chain volume you can read yourself: 24h volume × 0.7%. The model above does that
-          arithmetic in front of you.</p></details>
+          on-chain volume you can read yourself. The model above does that arithmetic in front of
+          you and prints its own working.</p></details>
     </div>
   </div>
 </section>
 
-<footer id="foot"></footer>
-
 <script>
-const CONFIG = { ca:'', x:'', pool:'', chart:'', launchpad:'https://ponsvault.com/launch' };
+const CONFIG = { ca:'', x:'', pair:'', chart:'', fee:1 };
 const HANDLES = ['blknoiz06','cobie','notthreadguy','inversebrah','CryptoKaleo','Pentosh1',
                  'MustStopMurad','Cented7'];
-document.documentElement.classList.add('js');
 
 const $ = s => document.querySelector(s);
 const usd = n => n==null ? '—' : '$' + Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
 const num = n => n==null ? '—' : Number(n).toLocaleString('en-US');
 
-/* ---- anti-scam strip: two states, one bar ---------------------------- */
-(function(){
-  const s = $('#strip');
-  s.innerHTML = CONFIG.ca
-    ? `<b>OFFICIAL TOKEN $POT</b> <span class="addr">${CONFIG.ca}</span> — anything else is not ours`
-    : `<b>$POT HAS NO CONTRACT ADDRESS YET.</b> When it exists it will be here. Anyone posting one before that is scamming you.`;
-})();
+/* strip: two states, one bar */
+$('#strip').innerHTML = CONFIG.ca
+  ? `<b>OFFICIAL MINT $POT</b> ${CONFIG.ca} — anything else is not ours`
+  : `<b>$POT has no mint address yet.</b> When it exists it will be here. Anyone posting one before that is scamming you.`;
 
-/* ---- footer ---------------------------------------------------------- */
-$('#foot').textContent = CONFIG.ca
-  ? 'POT · Robinhood Chain · ' + CONFIG.ca
-  : 'POT · Robinhood Chain · no contract address yet';
-
-/* ---- loader: real clock, always a backstop ---------------------------- */
-(function(){
-  const HOLD = 4600, el = $('#load'), bar = $('#lbar');
-  const t0 = performance.now();
-  let done = false;
-  function finish(){
-    if (done) return; done = true;
-    el.classList.add('done');
-    document.documentElement.classList.remove('loading');
-    setTimeout(()=>{ el.hidden = true; }, 600);
-  }
-  (function tick(){
-    const p = Math.min(1, (performance.now()-t0)/HOLD);
-    bar.style.width = (p*100).toFixed(1) + '%';
-    if (p < 1) requestAnimationFrame(tick); else finish();
-  })();
-  setTimeout(finish, HOLD + 1200);          // backstop: never trap the page
-})();
-
-/* ---- nav ------------------------------------------------------------- */
+/* nav */
 $('#mb').addEventListener('click', ()=> $('#menu').classList.toggle('open'));
 $('#menu').addEventListener('click', e => { if (e.target.tagName==='A') $('#menu').classList.remove('open'); });
 (function(){
-  // must filter to #-prefixed hrefs — querySelector('/docs.html') throws and
-  // would silently kill every script after this one
+  // filter to #-prefixed hrefs — querySelector('/docs.html') throws and would
+  // silently kill every script after this one
   const links = [...document.querySelectorAll('nav a')].filter(a => (a.getAttribute('href')||'').startsWith('#'));
   const map = new Map();
   links.forEach(a => { const t = document.querySelector(a.getAttribute('href')); if (t) map.set(t, a); });
-  const io = new IntersectionObserver(es => {
-    es.forEach(e => { if (e.isIntersecting){ links.forEach(l=>l.classList.remove('on')); map.get(e.target)?.classList.add('on'); } });
-  }, { rootMargin:'-45% 0px -50% 0px' });
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting){ links.forEach(l=>l.classList.remove('on')); map.get(e.target)?.classList.add('on'); }
+  }), { rootMargin:'-45% 0px -50% 0px' });
   map.forEach((_, sec) => io.observe(sec));
 })();
 
-/* ---- reveals --------------------------------------------------------- */
+/* reveals */
 (function(){
-  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ e.target.classList.add('vis'); io.unobserve(e.target);} }), {threshold:.12});
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting){ e.target.classList.add('vis'); io.unobserve(e.target); }
+  }), {threshold:.1});
   document.querySelectorAll('.rv').forEach(el => io.observe(el));
 })();
 
-/* ---- marquee of real handles ----------------------------------------- */
+/* marquee */
 (function(){
-  const row = $('#mq');
   const one = HANDLES.map(h =>
     `<span class="chip"><img src="/api/avatar?h=${h}" alt="" referrerpolicy="no-referrer"
       onload="this.classList.add('ok')" onerror="this.remove()">@${h}</span>`).join('');
-  row.innerHTML = one + one;               // duplicate for a seamless loop
+  $('#mq').innerHTML = one + one;          // duplicated for a seamless loop
 })();
 
-/* ---- countdown to the next UTC hour ---------------------------------- */
-(function(){
-  const el = $('#s-next');
-  setInterval(function tick(){
-    const now = new Date();
-    const next = new Date(now); next.setUTCMinutes(60,0,0);
-    const s = Math.max(0, Math.floor((next-now)/1000));
-    el.textContent = String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
-  }, 1000);
-})();
+/* countdown to the next utc hour */
+setInterval(function tick(){
+  const now = new Date(), next = new Date(now);
+  next.setUTCMinutes(60,0,0);
+  const s = Math.max(0, Math.floor((next-now)/1000));
+  $('#s-next').textContent = String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+}, 1000);
 
-/* ---- the hour: stays empty and says so ------------------------------- */
+/* this hour */
 async function loadHour(){
-  const st = $('#feed-status'), body = $('#hour-empty');
-  st.classList.remove('live');
-  st.querySelector('span').textContent = 'Reading…';
+  const st = $('#feed-status'), box = $('#hour-empty');
+  st.classList.remove('live'); st.querySelector('span').textContent = 'reading…';
   if (!CONFIG.ca){
-    st.querySelector('span').textContent = 'Feed offline';
-    body.querySelector('h4').textContent = 'No coin yet, so no hour yet.';
-    body.querySelector('p').textContent =
-      'Posts and view counts appear the moment there is a contract address. Nothing here is simulated.';
+    st.querySelector('span').textContent = 'feed offline';
+    box.querySelector('h4').textContent = 'No coin yet, so no hour yet.';
     return;
   }
   try{
-    const r = await fetch('/api/coin?ca='+encodeURIComponent(CONFIG.ca)).then(r=>r.json());
-    if (r.potPerHour != null){ $('#s-pot').textContent = usd(r.potPerHour); }
-    st.classList.add('live'); st.querySelector('span').textContent = 'Live';
-  }catch{
-    st.querySelector('span').textContent = 'Feed offline';
-  }
+    const r = await fetch(`/api/coin?ca=${encodeURIComponent(CONFIG.ca)}&fee=${CONFIG.fee}`).then(r=>r.json());
+    if (r.potPerHour != null) $('#s-pot').textContent = usd(r.potPerHour);
+    st.classList.add('live'); st.querySelector('span').textContent = 'live';
+  }catch{ st.querySelector('span').textContent = 'feed offline'; }
 }
 $('#b-retry').addEventListener('click', loadHour);
 loadHour();
 
-/* ---- check a post: a real read of a real endpoint --------------------- */
-$('#b-clear').addEventListener('click', ()=>{ $('#f-url').value=''; $('#o-check').hidden = true; });
-// mirror of the server's parser, so garbage never becomes a 400 round-trip
+/* check a post */
 const postId = s => (String(s).trim().match(/status(?:es)?\/(\d{1,25})/) ||
                      String(s).trim().match(/^(\d{1,25})$/) || [])[1] || null;
-
+$('#b-clear').addEventListener('click', ()=>{ $('#f-url').value=''; $('#o-check').hidden=true; $('#ck-src').textContent='idle'; });
 $('#b-check').addEventListener('click', async ()=>{
-  const v = $('#f-url').value.trim();
-  const out = $('#o-check');
+  const v = $('#f-url').value.trim(), out = $('#o-check');
   out.hidden = false;
   if (!v){ out.innerHTML = 'Paste a post url or id first.'; return; }
   if (!postId(v)){ out.innerHTML = 'That does not look like a post url or id. It should end in /status/1234567890 — or just paste the number.'; return; }
-  out.innerHTML = 'Reading from X…';
+  out.innerHTML = 'reading from X…'; $('#ck-src').textContent = 'fetching';
   try{
     const r = await fetch('/api/tweet?url='+encodeURIComponent(v)).then(r=>r.json());
+    $('#ck-src').textContent = r.src || 'none';
     if (r.error){ out.innerHTML = 'That does not look like a post url or id.'; return; }
     if (!r.exists){ out.innerHTML = 'X did not return that post. It may be private, deleted, or the id is wrong.'; return; }
     const views = r.views == null
-      ? '<b>—</b>  <span style="color:var(--dim)">(this source does not report views)</span>'
+      ? '<b>—</b>  (this source does not report views)'
       : '<b class="g" style="color:var(--gold)">'+num(r.views)+'</b>';
     out.innerHTML =
-      'handle   <b>@'+(r.handle||'—')+'</b>\n' +
-      'views    '+views+'\n' +
-      'likes    <b>'+num(r.likes)+'</b>\n' +
-      'read via <b>'+r.src+'</b>\n\n' +
+      '  handle   <b>@'+(r.handle||'—')+'</b>\n'+
+      '  views    '+views+'\n'+
+      '  likes    <b>'+num(r.likes)+'</b>\n'+
+      '  source   <b>'+r.src+'</b>\n\n'+
       (r.views == null
-        ? 'Without a view count this post cannot be ranked, so it cannot win an hour.'
-        : 'If this were the most-viewed post about $POT this hour, the whole pot would be sent to @'+r.handle+' in dollars. Nothing to claim.');
+        ? '  Without a view count this post cannot be ranked, so it cannot win an hour.'
+        : '  If this were the most-viewed post about $POT this hour, the whole pot would go to @'+r.handle+' in dollars. Nothing to claim.');
   }catch{
+    $('#ck-src').textContent = 'error';
     out.innerHTML = 'Could not reach X from here. Try again in a moment.';
   }
 });
 
-/* ---- the model: real arithmetic, shown --------------------------------- */
+/* the model */
 function model(){
   const vol = Math.max(0, Number($('#f-vol').value)||0);
-  const day = vol * 0.007, hour = day/24;
+  const fee = Math.min(3, Math.max(0, Number($('#f-fee').value)||0));
+  const day = vol * (fee/100), hour = day/24;
   $('#m-day').textContent  = usd(day);
   $('#m-hour').textContent = usd(hour);
+  const filled = Math.round((fee/3)*40);
+  $('#m-bar').textContent = '['+'█'.repeat(filled)+'░'.repeat(40-filled)+'] '+fee.toFixed(2)+'% of 3.00% cap';
   $('#o-model').innerHTML =
-    num(vol)+' × 0.70%  =  <b>'+usd(day)+'</b> a day\n'+
-    usd(day)+' ÷ 24  =  <b class="g" style="color:var(--gold)">'+usd(hour)+'</b> to one person, every hour';
+    '  '+num(vol)+' × '+fee.toFixed(2)+'%  =  <b>'+usd(day)+'</b> a day\n'+
+    '  '+usd(day)+' ÷ 24  =  <b class="g" style="color:var(--gold)">'+usd(hour)+'</b> to one person, every hour';
 }
 $('#f-vol').addEventListener('input', model);
+$('#f-fee').addEventListener('input', model);
 model();
 </script>
 </body>
